@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Reporte">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_orange_dark"
+        android:textColor="@android:color/white"
+        android:gravity="center"
+        android:textSize="30dp"
+        android:text="Datos de Usuario"/>
+
+    <TextView
+        android:id="@+id/lblUsuario"
+        android:layout_width="match_parent"
+        android:layout_height="530dp"
+        android:gravity="center"
+        android:textSize="40dp"
+        android:text="(valor recibido)" />
+
+</LinearLayout>
