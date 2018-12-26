@@ -1,0 +1,13 @@
+Generar pdf 
+3 estados : rojo (Critico), naranja (Alerta), verde (correcto)
+el total mensual se dividirá entre 30, 31, 28 o 29 y quitar los feriados
+se pinta de rojo cuando la venta sea menor al 15% del total mensual multiplicado por el dia en que estamos
+al apretar la barra se entrará a otra actividad para que muestre al detalle diario todas las ventas e incluso las ventas anuales mensuales
+pantalla de ventas (por mes) con objetivo objetivo 
+barra de progreso en la parte superior (referido a las ventas diarias y la mensual)
+
+
+Listado de clientes por factura, la que tenga mas dias de retraso a partir de la fecha de vencimiento (no se acumulan las facturas)
+boton al costado para que genere los reportes de a cuerdo a todas sus deudas
+mostrar solo deudres
+usar andorid studio
