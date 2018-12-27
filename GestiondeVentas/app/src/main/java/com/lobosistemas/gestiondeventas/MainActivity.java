@@ -2,28 +2,28 @@ package com.lobosistemas.gestiondeventas;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.graphics.Canvas;
-import android.graphics.ColorFilter;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.text.TextWatcher;
 
 import com.github.mikephil.charting.utils.ColorTemplate;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     ListView lstClientes;
     ProgressBar pbMes, pbDia;
+    EditText txtBuscar;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        txtBuscar = findViewById(R.id.txtBuscar);
         lstClientes = findViewById(R.id.lstClientes);
         pbMes = findViewById(R.id.pbMes);
         pbDia = findViewById(R.id.pbDia);
@@ -58,9 +59,12 @@ public class MainActivity extends AppCompatActivity {
             pbDia.setProgressTintList(ColorStateList.valueOf(ColorTemplate.rgb("#73BE46")));
         }
 
+        String[] empresas = {"lobo", "monday", "git Hub", "Microsoft", "serbosa", "Jurado", "alfandina", "Consorcio", "hsec peru", "imagen ALternativa", "Calquipa"
+            ,"Continental", "la Joya mina", "art atlas", "Compañia safranal", "pro espiritu", "pulso medico", "gut hib", "jurado", "adsad"};
+
         String[] values = new String[20];
         for (int i=0; i<values.length; i++){
-            values[i] = "Cliente " + i;
+            values[i] = "Nombre" + i;
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1
                 ,android.R.id.text1, values);
@@ -83,5 +87,24 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(mostrar);
             }
         });
+
+        txtBuscar.addTextChangedListener(myTextWatcher);
     }
+
+    TextWatcher myTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
 }
