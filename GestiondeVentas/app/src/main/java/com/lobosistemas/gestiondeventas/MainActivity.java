@@ -1,6 +1,14 @@
 package com.lobosistemas.gestiondeventas;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,22 +18,45 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.utils.ColorTemplate;
+
 public class MainActivity extends AppCompatActivity {
 
     ListView lstClientes;
     ProgressBar pbMes, pbDia;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         lstClientes = findViewById(R.id.lstClientes);
-        pbDia = findViewById(R.id.pbDia);
         pbMes = findViewById(R.id.pbMes);
+        pbDia = findViewById(R.id.pbDia);
 
-        pbDia.setProgress(70);
-        pbMes.setProgress(30);
+        pbMes.setProgress(50);
+        pbMes.setScaleY(12.0f);
+
+        pbDia.setProgress(30);
+        pbDia.setScaleY(4f);
+
+
+        if (pbMes.getProgress() < 40){
+            pbMes.setProgressTintList(ColorStateList.valueOf(ColorTemplate.rgb("#d02e26")));
+        }else if (pbMes.getProgress() >= 40 && pbMes.getProgress() < 70){
+            pbMes.setProgressTintList(ColorStateList.valueOf(ColorTemplate.rgb("#faa519")));
+        }else if (pbMes.getProgress() >= 70){
+            pbMes.setProgressTintList(ColorStateList.valueOf(ColorTemplate.rgb("#73BE46")));
+        }
+
+        if (pbDia.getProgress() < 40){
+            pbDia.setProgressTintList(ColorStateList.valueOf(ColorTemplate.rgb("#d02e26")));
+        }else if (pbDia.getProgress() >= 40 && pbDia.getProgress() < 70){
+            pbDia.setProgressTintList(ColorStateList.valueOf(ColorTemplate.rgb("#faa519")));
+        }else if (pbDia.getProgress() >= 70){
+            pbDia.setProgressTintList(ColorStateList.valueOf(ColorTemplate.rgb("#73BE46")));
+        }
 
         String[] values = new String[20];
         for (int i=0; i<values.length; i++){

@@ -9,15 +9,15 @@
                 android:angle="270"></gradient>
         </shape>
     </item>
-    <item android:id="@android:id/progress">
+    <!--item android:id="@android:id/progress">
         <clip>
             <shape>
-                <gradient android:startColor="@color/colorPrimary"
-                    android:centerColor="@color/colorPrimary"
+                <gradient android:startColor="@color/comdin"
+                    android:centerColor="@color/comdin"
                     android:centerY="1.0"
-                    android:endColor="@color/colorPrimary"
+                    android:endColor="@color/comdin"
                     android:angle="270"></gradient>
             </shape>
         </clip>
-    </item>
+    </item-->
 </layer-list>
