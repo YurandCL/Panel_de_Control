@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(adaptador);*/
     }
 
-    private void clickAdaptador(ArrayList<ClientesVo> listado_clientes) {
+    private void clickAdaptador(final ArrayList<ClientesVo> listado_clientes) {
 
         final Adaptador adaptador = new Adaptador(listado_clientes);
 
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, Reporte.class);
-                intent.putExtra("Nombre", empresas.get(mRecyclerView.getChildAdapterPosition(v)).getDias_retraso());
+                intent.putExtra("Nombre", listado_clientes.get(mRecyclerView.getChildAdapterPosition(v)).getNombre());
                 startActivity(intent);
             }
         });
