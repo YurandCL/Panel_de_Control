@@ -7,20 +7,22 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="46dp"
+        android:layout_height="38dp"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/lbl_cliente"
-            android:layout_width="304dp"
+            android:layout_width="290dp"
             android:layout_height="46dp"
-            android:text="Nombre de la empresa" />
+            android:text="Nombre de la empresa"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/lbl_dias_retraso"
             android:layout_width="match_parent"
             android:layout_height="46dp"
-            android:text="Dias Retraso" />
+            android:text="Dias Retraso"
+            android:textSize="18sp" />
 
     </LinearLayout>
     <TextView
