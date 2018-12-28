@@ -16,7 +16,7 @@ public class Reporte extends AppCompatActivity {
         lblUsuario = findViewById(R.id.lblUsuario);
         Bundle parametros = this.getIntent().getExtras();
         if (parametros != null) {
-            String recibidos = getIntent().getExtras().getString("nombre");
+            String recibidos = getIntent().getExtras().getString("Nombre");
             lblUsuario.setText(recibidos);
         }
     }

@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -30,9 +32,8 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar pbMes, pbDia;
     EditText txtBuscar;
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+//    private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private Adaptador miAdaptador;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -48,7 +49,11 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
+        //mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        //mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         llenarClientes();
+
+        clickAdaptador(empresas);
 
         pbMes = findViewById(R.id.pbMes);
         pbDia = findViewById(R.id.pbDia);
@@ -102,15 +107,12 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i<empresas_clientes.length; i++) {
             empresas.add(new ClientesVo(empresas_clientes[i], dias_retraso[i]));
         }
-        mAdapter = new Adaptador(empresas);
-        mRecyclerView.setAdapter(mAdapter);
         return null;
     }
 
     TextWatcher myTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
         }
 
         @Override
@@ -131,11 +133,24 @@ public class MainActivity extends AppCompatActivity {
                 filterList.add(item);
             }
         }
-        try {
-            Adaptador adaptador = new Adaptador(filterList);
-            mRecyclerView.setAdapter(adaptador);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        clickAdaptador(filterList);
+        /*Adaptador adaptador = new Adaptador(filterList);
+        mRecyclerView.setAdapter(adaptador);*/
+    }
+
+    private void clickAdaptador(ArrayList<ClientesVo> listado_clientes) {
+
+        final Adaptador adaptador = new Adaptador(listado_clientes);
+
+        adaptador.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, Reporte.class);
+                intent.putExtra("Nombre", empresas.get(mRecyclerView.getChildAdapterPosition(v)).getDias_retraso());
+                startActivity(intent);
+            }
+        });
+
+        mRecyclerView.setAdapter(adaptador);
     }
 }
