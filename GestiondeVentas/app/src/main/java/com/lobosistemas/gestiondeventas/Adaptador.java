@@ -13,6 +13,18 @@ public class Adaptador extends RecyclerView.Adapter<Adaptador.ViewHolderClientes
 
     ArrayList<ClientesVo> listaClientes;
 
+    public static class ViewHolderClientes extends RecyclerView.ViewHolder {
+
+        TextView nombre_cliente, dias_retraso;
+
+        public ViewHolderClientes(@NonNull View itemView) {
+            super(itemView);
+
+            nombre_cliente = (TextView)itemView.findViewById(R.id.lbl_cliente);
+            dias_retraso  = (TextView)itemView.findViewById(R.id.lbl_dias_retraso);
+        }
+    }
+
     public Adaptador(ArrayList<ClientesVo> listaClientes) {
         this.listaClientes = listaClientes;
     }
@@ -33,17 +45,5 @@ public class Adaptador extends RecyclerView.Adapter<Adaptador.ViewHolderClientes
     @Override
     public int getItemCount() {
         return listaClientes.size() ;
-    }
-
-    public class ViewHolderClientes extends RecyclerView.ViewHolder {
-
-        TextView nombre_cliente, dias_retraso;
-
-        public ViewHolderClientes(@NonNull View itemView) {
-            super(itemView);
-
-            nombre_cliente = (TextView)itemView.findViewById(R.id.lbl_cliente);
-            dias_retraso  = (TextView)itemView.findViewById(R.id.lbl_dias_retraso);
-        }
     }
 }

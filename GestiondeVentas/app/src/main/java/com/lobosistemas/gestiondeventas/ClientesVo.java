@@ -1,5 +1,7 @@
 package com.lobosistemas.gestiondeventas;
 
+import java.util.ArrayList;
+
 public class ClientesVo {
 
     private String nombre;

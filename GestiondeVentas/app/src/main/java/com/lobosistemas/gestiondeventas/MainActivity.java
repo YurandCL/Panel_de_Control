@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private Adaptador miAdaptador;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -48,8 +49,6 @@ public class MainActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         llenarClientes();
-        mAdapter = new Adaptador(empresas);
-        mRecyclerView.setAdapter(mAdapter);
 
         pbMes = findViewById(R.id.pbMes);
         pbDia = findViewById(R.id.pbDia);
@@ -91,12 +90,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private ArrayList<ClientesVo> llenarClientes() {
-        String[] empresas_clientes = {"lobo", "monday", "git Hub", "Microsoft", "serbosa", "Jurado", "alfandina", "Consorcio", "hsec peru", "imagen ALternativa", "Calquipa"
-                ,"Continental", "la Joya mina", "art atlas", "Compañia safranal", "pro espiritu", "pulso medico", "gut hib", "jurado", "adsad"};
-        String[] dias_retraso = {"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20"};
+
+        String[] empresas_clientes = {"lobo", "monday", "git Hub", "Microsoft", "serbosa", "Jurado",
+                "alfandina", "Consorcio", "hsec peru", "imagen ALternativa", "Calquipa"
+                ,"Continental", "la Joya mina", "art atlas", "Compañia safranal", "pro espiritu",
+                "pulso medico", "gut hib", "jurado", "adsad"};
+
+        String[] dias_retraso = {"1","2","3","4","5","6","7","8","9","10","11","12","13","14",
+                "15","16","17","18","19","20"};
+
         for (int i = 0; i<empresas_clientes.length; i++) {
             empresas.add(new ClientesVo(empresas_clientes[i], dias_retraso[i]));
         }
+        mAdapter = new Adaptador(empresas);
+        mRecyclerView.setAdapter(mAdapter);
         return null;
     }
 
@@ -108,12 +115,27 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            Toast.makeText(MainActivity.this,"estas buscando",Toast.LENGTH_SHORT).show();
+            txtBuscar.setTextColor(ColorTemplate.rgb("#00417d"));
         }
 
         @Override
         public void afterTextChanged(Editable s) {
-
+            filtro(s.toString());
         }
     };
+
+    private void filtro(String text) {
+        ArrayList<ClientesVo> filterList = new ArrayList<>();
+        for (ClientesVo item : empresas){
+            if (item.getNombre().toLowerCase().contains(text.toLowerCase())){
+                filterList.add(item);
+            }
+        }
+        try {
+            Adaptador adaptador = new Adaptador(filterList);
+            mRecyclerView.setAdapter(adaptador);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }
