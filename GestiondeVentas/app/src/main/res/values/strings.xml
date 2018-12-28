@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Gestion de Ventas</string>
+    <string name="app_label">Buscador</string>
+    <string name="search_hint">Escriba aqui...</string>
 </resources>

@@ -3,17 +3,22 @@ package com.lobosistemas.gestiondeventas;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.text.TextWatcher;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.utils.ColorTemplate;
 
@@ -21,9 +26,12 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    ListView lstClientes;
+    ArrayList<ClientesVo> empresas;
     ProgressBar pbMes, pbDia;
     EditText txtBuscar;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -32,12 +40,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         txtBuscar = findViewById(R.id.txtBuscar);
-        lstClientes = findViewById(R.id.lstClientes);
+
+        empresas = new ArrayList<>();
+
+        mRecyclerView = findViewById(R.id.rlClientes);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        llenarClientes();
+        mAdapter = new Adaptador(empresas);
+        mRecyclerView.setAdapter(mAdapter);
+
         pbMes = findViewById(R.id.pbMes);
         pbDia = findViewById(R.id.pbDia);
 
         pbMes.setProgress(50);
-        pbMes.setScaleY(12.0f);
+        pbMes.setScaleY(10f);
 
         pbDia.setProgress(30);
         pbDia.setScaleY(4f);
@@ -59,27 +77,9 @@ public class MainActivity extends AppCompatActivity {
             pbDia.setProgressTintList(ColorStateList.valueOf(ColorTemplate.rgb("#73BE46")));
         }
 
-        String[] empresas = {"lobo", "monday", "git Hub", "Microsoft", "serbosa", "Jurado", "alfandina", "Consorcio", "hsec peru", "imagen ALternativa", "Calquipa"
-            ,"Continental", "la Joya mina", "art atlas", "Compañia safranal", "pro espiritu", "pulso medico", "gut hib", "jurado", "adsad"};
 
-        String[] values = new String[20];
-        for (int i=0; i<values.length; i++){
-            values[i] = "Nombre" + i;
-        }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1
-                ,android.R.id.text1, values);
-        lstClientes.setAdapter(adapter);
-        lstClientes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int i, long l) {
-                int posicion = i;
-                String valor = lstClientes.getItemAtPosition(posicion).toString();
-                Intent mostrar = new Intent(MainActivity.this, Reporte.class);
-                mostrar.putExtra("nombre", valor);
-                startActivity(mostrar);
-            }
-        });
 
+        //Llamando otra actividad para mostrar graficas de los ingresos obtenidos
         pbMes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,8 +87,17 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(mostrar);
             }
         });
-
         txtBuscar.addTextChangedListener(myTextWatcher);
+    }
+
+    private ArrayList<ClientesVo> llenarClientes() {
+        String[] empresas_clientes = {"lobo", "monday", "git Hub", "Microsoft", "serbosa", "Jurado", "alfandina", "Consorcio", "hsec peru", "imagen ALternativa", "Calquipa"
+                ,"Continental", "la Joya mina", "art atlas", "Compañia safranal", "pro espiritu", "pulso medico", "gut hib", "jurado", "adsad"};
+        String[] dias_retraso = {"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20"};
+        for (int i = 0; i<empresas_clientes.length; i++) {
+            empresas.add(new ClientesVo(empresas_clientes[i], dias_retraso[i]));
+        }
+        return null;
     }
 
     TextWatcher myTextWatcher = new TextWatcher() {
@@ -99,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+            Toast.makeText(MainActivity.this,"estas buscando",Toast.LENGTH_SHORT).show();
         }
 
         @Override
