@@ -3,124 +3,37 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use DB;
 use App\Http\Requests;
+use App\Http\Controllers\Controller;
 
 class PagosController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function getIndex()
+    public function pagosMensuales()
     {
-        return 'PagosController';
+    	$añoActual = date("Y");
+    	$mesActual = date("m");
+    	$fechaFiltro = $añoActual."-".$mesActual."-01";
+    	//$fechaFiltroEstatica = "2018-12-01";
+    
+        $pagos_monto = DB::table('tbl_pagos')->where('pagos_fechapago', '>', $fechaFiltro)->sum('pagos_monto');        
+               
+        $pagos_monto = number_format($pagos_monto, 2, ',', ' ');
+        return $pagos_monto;
     }
 
-    public function getPagosCod(){
-        return 'nombre de la empresa';
-    }
-
-    public function postPagosCod(){
-        return 'nombre de la empresa o razon social';
-    }
-
-    public function getPagosMonto(){
-        return 'nombre de la empresa';
-    }
-
-    public function postPagosMonto(){
-        return 'nombre de la empresa o razon social';
-    }
-
-    public function getPagosFacturaCod(){
-        return 'codigo de la factura';
-    }
-
-    public function postPagosFacturaCod(){
-        return 'ncodigo de la factura';
-    }
-
-    public function getPagosFechaPago(){
-        return 'nombre de la empresa';
-    }
-
-    public function postPagosFechaPago(){
-        return 'nombre de la empresa o razon social';
-    }
-
-    public function getPagosEmpresaCod(){
-        return 'nombre de la empresa';
-    }
-
-    public function postPagosEmpresaCod(){
-        return 'nombre de la empresa o razon social';
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function pagosDiarios()
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+    	$añoActual = date("Y");
+    	$mesActual = date("m");
+    	$diaActual = date("d");
+    	$fechaFiltro = $añoActual."-".$mesActual."-".$diaActual;
+    
+        $pagos_monto = DB::table('tbl_pagos')->where('pagos_fechapago', '=', $fechaFiltro)->sum('pagos_monto');        
+               
+        $pagos_monto = number_format($pagos_monto, 2, ',', ' ');
+        return $pagos_monto;
     }
 }
+
+
