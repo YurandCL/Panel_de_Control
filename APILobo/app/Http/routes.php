@@ -30,10 +30,5 @@ Route::group(['middleware' => ['web']], function () {
     //
 });*/
 
-Route::controllers(
-[
-	'consulta/empresas' => 'EmpresasController',
-	'consulta/facturas' => 'FacturasController',
-	'consulta/pagos' => 'PagosController',
-	'/'=>'Auth\AuthController'
-]);
+Route::get('empresas', 'EmpresasController@getListado');
+
