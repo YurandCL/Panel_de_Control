@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar pbMes, pbDia;
     EditText txtBuscar;
     private RecyclerView mRecyclerView;
-//    private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -49,8 +48,6 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        //mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        //mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         llenarClientes();
 
         clickAdaptador(empresas);
