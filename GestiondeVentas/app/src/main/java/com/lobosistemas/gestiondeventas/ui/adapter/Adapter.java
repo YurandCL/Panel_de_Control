@@ -1,4 +1,4 @@
-package com.lobosistemas.gestiondeventas;
+package com.lobosistemas.gestiondeventas.ui.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -7,13 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.lobosistemas.gestiondeventas.R;
+import com.lobosistemas.gestiondeventas.model.Empresa;
+
 import java.util.ArrayList;
 
-public class Adaptador extends
-        RecyclerView.Adapter<Adaptador.ViewHolderClientes>
-        implements View.OnClickListener {
+public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolderClientes> implements View.OnClickListener {
 
-    ArrayList<ClientesVo> listaClientes;
+    ArrayList<Empresa> listaClientes;
     private View.OnClickListener listener;
 
     public static class ViewHolderClientes extends RecyclerView.ViewHolder {
@@ -28,7 +29,7 @@ public class Adaptador extends
         }
     }
 
-    public Adaptador(ArrayList<ClientesVo> listaClientes) {
+    public Adapter(ArrayList<Empresa> listaClientes) {
         this.listaClientes = listaClientes;
     }
 
@@ -42,8 +43,8 @@ public class Adaptador extends
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderClientes viewHolderClientes, int i) {
-        viewHolderClientes.nombre_cliente.setText(listaClientes.get(i).getNombre());
-        viewHolderClientes.dias_retraso.setText(listaClientes.get(i).getDias_retraso());
+        viewHolderClientes.nombre_cliente.setText(listaClientes.get(i).getEmpresa_razonsocial());
+        viewHolderClientes.dias_retraso.setText(listaClientes.get(i).getCalc());
     }
 
     @Override

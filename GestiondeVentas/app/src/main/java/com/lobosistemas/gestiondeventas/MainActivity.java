@@ -3,37 +3,38 @@ package com.lobosistemas.gestiondeventas;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.text.TextWatcher;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.lobosistemas.gestiondeventas.io.GestiondeVentasApiAdapter;
+import com.lobosistemas.gestiondeventas.model.Empresa;
+import com.lobosistemas.gestiondeventas.ui.adapter.EmpresaAdapter;
 
 import java.util.ArrayList;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Callback<ArrayList<Empresa>> {
 
-    ArrayList<ClientesVo> empresas;
+    ArrayList<Empresa> empresas;
+
     ProgressBar pbMes, pbDia;
     EditText txtBuscar;
     private RecyclerView mRecyclerView;
-//    private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+
+    private EmpresaAdapter mAdapter; //Adaptador para las empresas//
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -45,16 +46,25 @@ public class MainActivity extends AppCompatActivity {
 
         empresas = new ArrayList<>();
 
-        mRecyclerView = findViewById(R.id.rlClientes);
+        //-------------------------RecyclerView-------------------------//
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_empresas);
         mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        //mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        //mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        llenarClientes();
 
-        clickAdaptador(empresas);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(layoutManager);
+        //--------------------------------------------------------------//
 
+        //---------------------------Adaptador--------------------------//
+        mAdapter= new EmpresaAdapter();
+        mRecyclerView.setAdapter(mAdapter);
+        //--------------------------------------------------------------//
+
+        //---------------------------RetroFit---------------------------//
+        retrofit2.Call<ArrayList<Empresa>> call = GestiondeVentasApiAdapter.getApiService().getEmpresas();
+        call.enqueue(this);
+        //--------------------------------------------------------------//
+
+        //-------------------------Barras de Progreso-------------------------//
         pbMes = findViewById(R.id.pbMes);
         pbDia = findViewById(R.id.pbDia);
 
@@ -64,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         pbDia.setProgress(30);
         pbDia.setScaleY(4f);
 
-
+        //-----------------Propiedades de las Barras-----------------//
         if (pbMes.getProgress() < 40){
             pbMes.setProgressTintList(ColorStateList.valueOf(ColorTemplate.rgb("#d02e26")));
         }else if (pbMes.getProgress() >= 40 && pbMes.getProgress() < 70){
@@ -80,8 +90,7 @@ public class MainActivity extends AppCompatActivity {
         }else if (pbDia.getProgress() >= 70){
             pbDia.setProgressTintList(ColorStateList.valueOf(ColorTemplate.rgb("#73BE46")));
         }
-
-
+        //------------------------------------------------------------//
 
         //Llamando otra actividad para mostrar graficas de los ingresos obtenidos
         pbMes.setOnClickListener(new View.OnClickListener() {
@@ -91,10 +100,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(mostrar);
             }
         });
-        txtBuscar.addTextChangedListener(myTextWatcher);
+        //--------------------------------------------------------------------//
     }
 
-    private ArrayList<ClientesVo> llenarClientes() {
+    /*private ArrayList<Empresa> llenarClientes() {
 
         String[] empresas_clientes = {"lobo", "monday", "git Hub", "Microsoft", "serbosa", "Jurado",
                 "alfandina", "Consorcio", "hsec peru", "imagen ALternativa", "Calquipa"
@@ -105,32 +114,20 @@ public class MainActivity extends AppCompatActivity {
                 "15","16","17","18","19","20"};
 
         for (int i = 0; i<empresas_clientes.length; i++) {
-            empresas.add(new ClientesVo(empresas_clientes[i], dias_retraso[i]));
+            empresas.add(new Empresa(empresas_clientes[i], dias_retraso[i]));
         }
         return null;
-    }
+    }*/
 
-    TextWatcher myTextWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
 
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            txtBuscar.setTextColor(ColorTemplate.rgb("#00417d"));
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-            filtro(s.toString());
-        }
-    };
 
     private void filtro(String text) {
-        ArrayList<ClientesVo> filterList = new ArrayList<>();
-        for (ClientesVo item : empresas){
-            if (item.getNombre().toLowerCase().contains(text.toLowerCase())){
+        ArrayList<Empresa> filterList = new ArrayList<>();
+        for (Empresa item : empresas){
+            Toast.makeText(this, item.getEmpresa_razonsocial().toLowerCase(), Toast.LENGTH_SHORT).show();
+            if (item.getEmpresa_razonsocial().toLowerCase().contains(text.toLowerCase())){
                 filterList.add(item);
+
             }
         }
         clickAdaptador(filterList);
@@ -138,19 +135,61 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(adaptador);*/
     }
 
-    private void clickAdaptador(final ArrayList<ClientesVo> listado_clientes) {
+    private void clickAdaptador(final ArrayList<Empresa> empresas) {
 
-        final Adaptador adaptador = new Adaptador(listado_clientes);
+        final EmpresaAdapter mAdapter= new EmpresaAdapter(empresas);
 
-        adaptador.setOnClickListener(new View.OnClickListener() {
+        mAdapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, Reporte.class);
-                intent.putExtra("Nombre", listado_clientes.get(mRecyclerView.getChildAdapterPosition(v)).getNombre());
+                intent.putExtra("Nombre", empresas.get(mRecyclerView.getChildAdapterPosition(v)).getEmpresa_razonsocial());
                 startActivity(intent);
             }
         });
 
-        mRecyclerView.setAdapter(adaptador);
+        mRecyclerView.setAdapter(mAdapter);
     }
+
+    //--------------------Métodos de RetroFit---------------------------//
+    @Override
+    public void onResponse(retrofit2.Call<ArrayList<Empresa>> call, Response<ArrayList<Empresa>> response) {
+        if(response.isSuccessful()){
+            empresas = response.body();
+            Log.d("onResponse empresas","Se cargaron "+empresas.size()+" empresas");
+            mAdapter.setmDataSet(empresas); //Agregamos el adaptador al Recycler View//
+
+            clickAdaptador(empresas);
+
+            TextWatcher myTextWatcher = new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    txtBuscar.setTextColor(ColorTemplate.rgb("#00417d"));
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    filtro(s.toString());
+                }
+            };
+
+            txtBuscar.addTextChangedListener(myTextWatcher);
+        }
+    }
+
+    @Override
+    public void onFailure(retrofit2.Call<ArrayList<Empresa>> call, Throwable t) {
+        Log.d("onResponse empresas","Algo salió mal.");
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
+    //------------------------------------------------------------------//
+
 }
