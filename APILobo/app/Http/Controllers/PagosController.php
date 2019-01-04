@@ -9,30 +9,19 @@ use App\Http\Controllers\Controller;
 
 class PagosController extends Controller
 {
+
     public function pagosMensuales()
     {
-    	$añoActual = date("Y");
-    	$mesActual = date("m");
-    	$fechaFiltro = $añoActual."-".$mesActual."-01";
-    	//$fechaFiltroEstatica = "2018-12-01";
-    
-        $pagos_monto = DB::table('tbl_pagos')->where('pagos_fechapago', '>', $fechaFiltro)->sum('pagos_monto');        
-               
-        $pagos_monto = number_format($pagos_monto, 2, ',', ' ');
-        return $pagos_monto;
+        $anio_mes_Actual = date("Y-m");
+        $fechaFiltro = $anio_mes_Actual.'-01';
+        $pagos_monto_mes = DB::select('SELECT sum(pagos_monto) as suma_mes FROM tbl_pagos WHERE pagos_fechapago > ?', [$fechaFiltro]);
+        return $pagos_monto_mes;
     }
 
     public function pagosDiarios()
-    {
-    	$añoActual = date("Y");
-    	$mesActual = date("m");
-    	$diaActual = date("d");
-    	$fechaFiltro = $añoActual."-".$mesActual."-".$diaActual;
-    
-        $pagos_monto = DB::table('tbl_pagos')->where('pagos_fechapago', '=', $fechaFiltro)->sum('pagos_monto');        
-               
-        $pagos_monto = number_format($pagos_monto, 2, ',', ' ');
-        return $pagos_monto;
+    {   
+        $pagos_monto_dia = DB::select('SELECT sum(pagos_monto) as suma_dia FROM tbl_pagos WHERE pagos_fechapago = (CAST(now() as date))');
+        return $pagos_monto_dia;
     }
 }
 

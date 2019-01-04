@@ -18,16 +18,21 @@ import android.widget.Toast;
 
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.lobosistemas.gestiondeventas.io.GestiondeVentasApiAdapter;
+import com.lobosistemas.gestiondeventas.io.GestiondeVentasApiService;
 import com.lobosistemas.gestiondeventas.model.Empresa;
+import com.lobosistemas.gestiondeventas.model.Pago;
 import com.lobosistemas.gestiondeventas.ui.adapter.EmpresaAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements Callback<ArrayList<Empresa>> {
+public class MainActivity extends AppCompatActivity{
 
-    ArrayList<Empresa> empresas;
+    ArrayList<Empresa> empresas; //Para consultar las empresas
 
     ProgressBar pbMes, pbDia;
     EditText txtBuscar;
@@ -52,17 +57,63 @@ public class MainActivity extends AppCompatActivity implements Callback<ArrayLis
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
-        //--------------------------------------------------------------//
 
         //---------------------------Adaptador--------------------------//
         mAdapter= new EmpresaAdapter();
         mRecyclerView.setAdapter(mAdapter);
-        //--------------------------------------------------------------//
 
-        //---------------------------RetroFit---------------------------//
-        retrofit2.Call<ArrayList<Empresa>> call = GestiondeVentasApiAdapter.getApiService().getEmpresas();
-        call.enqueue(this);
-        //--------------------------------------------------------------//
+        //------------------------------------RetroFit Empresa--------------------------------------//
+        GestiondeVentasApiService ApiService = GestiondeVentasApiAdapter.getApiService();
+        Call<ArrayList<Empresa>> call = ApiService.getEmpresas();
+        call.enqueue(new Callback<ArrayList<Empresa>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Empresa>> call, Response<ArrayList<Empresa>> response) {
+                if(response.isSuccessful()){
+                    empresas = response.body();
+                    Log.d("onResponse empresas","Se cargaron "+empresas.size()+" empresas.");
+                    mAdapter.setmDataSet(empresas); //Agregamos el adaptador al Recycler View//
+
+                    clickAdaptador(empresas);
+
+                    TextWatcher myTextWatcher = new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            txtBuscar.setTextColor(ColorTemplate.rgb("#00417d"));
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                            filtro(s.toString());
+                        }
+                    };
+
+                    txtBuscar.addTextChangedListener(myTextWatcher);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Empresa>> call, Throwable t) {
+                Log.d("onResponse empresas","Algo salió mal.");
+            }
+        });
+
+        //------------------------------------RetroFit Pago--------------------------------------//
+        Call<ArrayList<Pago>> call_dos = ApiService.getPagos();
+        call_dos.enqueue(new Callback<ArrayList<Pago>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Pago>> call, Response<ArrayList<Pago>> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Pago>> call, Throwable t) {
+
+            }
+        });
 
         //-------------------------Barras de Progreso-------------------------//
         pbMes = findViewById(R.id.pbMes);
@@ -90,7 +141,6 @@ public class MainActivity extends AppCompatActivity implements Callback<ArrayLis
         }else if (pbDia.getProgress() >= 70){
             pbDia.setProgressTintList(ColorStateList.valueOf(ColorTemplate.rgb("#73BE46")));
         }
-        //------------------------------------------------------------//
 
         //Llamando otra actividad para mostrar graficas de los ingresos obtenidos
         pbMes.setOnClickListener(new View.OnClickListener() {
@@ -100,41 +150,20 @@ public class MainActivity extends AppCompatActivity implements Callback<ArrayLis
                 startActivity(mostrar);
             }
         });
-        //--------------------------------------------------------------------//
     }
 
-    /*private ArrayList<Empresa> llenarClientes() {
-
-        String[] empresas_clientes = {"lobo", "monday", "git Hub", "Microsoft", "serbosa", "Jurado",
-                "alfandina", "Consorcio", "hsec peru", "imagen ALternativa", "Calquipa"
-                ,"Continental", "la Joya mina", "art atlas", "Compañia safranal", "pro espiritu",
-                "pulso medico", "gut hib", "jurado", "adsad"};
-
-        String[] dias_retraso = {"1","2","3","4","5","6","7","8","9","10","11","12","13","14",
-                "15","16","17","18","19","20"};
-
-        for (int i = 0; i<empresas_clientes.length; i++) {
-            empresas.add(new Empresa(empresas_clientes[i], dias_retraso[i]));
-        }
-        return null;
-    }*/
-
-
-
+    //-----------------Búsqueda de Empresas-----------------//
     private void filtro(String text) {
         ArrayList<Empresa> filterList = new ArrayList<>();
         for (Empresa item : empresas){
-            Toast.makeText(this, item.getEmpresa_razonsocial().toLowerCase(), Toast.LENGTH_SHORT).show();
             if (item.getEmpresa_razonsocial().toLowerCase().contains(text.toLowerCase())){
                 filterList.add(item);
-
             }
         }
         clickAdaptador(filterList);
-        /*Adaptador adaptador = new Adaptador(filterList);
-        mRecyclerView.setAdapter(adaptador);*/
     }
 
+    //-----------------Mostrar Reporte de la Empresa-----------------//
     private void clickAdaptador(final ArrayList<Empresa> empresas) {
 
         final EmpresaAdapter mAdapter= new EmpresaAdapter(empresas);
@@ -150,46 +179,4 @@ public class MainActivity extends AppCompatActivity implements Callback<ArrayLis
 
         mRecyclerView.setAdapter(mAdapter);
     }
-
-    //--------------------Métodos de RetroFit---------------------------//
-    @Override
-    public void onResponse(retrofit2.Call<ArrayList<Empresa>> call, Response<ArrayList<Empresa>> response) {
-        if(response.isSuccessful()){
-            empresas = response.body();
-            Log.d("onResponse empresas","Se cargaron "+empresas.size()+" empresas");
-            mAdapter.setmDataSet(empresas); //Agregamos el adaptador al Recycler View//
-
-            clickAdaptador(empresas);
-
-            TextWatcher myTextWatcher = new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    txtBuscar.setTextColor(ColorTemplate.rgb("#00417d"));
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    filtro(s.toString());
-                }
-            };
-
-            txtBuscar.addTextChangedListener(myTextWatcher);
-        }
-    }
-
-    @Override
-    public void onFailure(retrofit2.Call<ArrayList<Empresa>> call, Throwable t) {
-        Log.d("onResponse empresas","Algo salió mal.");
-    }
-
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-
-    }
-    //------------------------------------------------------------------//
-
 }

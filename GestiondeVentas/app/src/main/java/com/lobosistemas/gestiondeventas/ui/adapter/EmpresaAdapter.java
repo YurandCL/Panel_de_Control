@@ -29,12 +29,12 @@ public class EmpresaAdapter extends RecyclerView.Adapter<EmpresaAdapter.ViewHold
     // Obtener referencias de los componentes visuales para cada elemento
     // Es decir, referencias de los EditText, TextViews, Buttons
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        // en este ejemplo cada elemento consta solo de un título
-        public TextView empresa;
+        public TextView empresa, retraso;
         public ViewHolder(View v) {
             super(v);
 
             empresa = (TextView)itemView.findViewById(R.id.empresa);
+            retraso = (TextView)itemView.findViewById(R.id.retraso);
         }
     }
 
@@ -76,6 +76,7 @@ public class EmpresaAdapter extends RecyclerView.Adapter<EmpresaAdapter.ViewHold
         // - reemplazamos el contenido de los views según tales datos
 
         holder.empresa.setText(mDataSet.get(i).getEmpresa_razonsocial());
+        holder.retraso.setText(mDataSet.get(i).getCalc());
     }
 
     // Método que define la cantidad de elementos del RecyclerView

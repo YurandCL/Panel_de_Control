@@ -15,7 +15,7 @@ class EmpresasController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function getListado(){
-        $test = DB::select('SELECT e.empresa_razonsocial, (CAST(now() as date) - f.factura_fvencimiento) as calc from tbl_empresa as e inner join tbl_factura as f on e.empresa_cod = f.factura_cliente_cod where f.factura_estado = ?', [0]);
+        $test = DB::select('SELECT e.empresa_cod,e.empresa_razonsocial, (CAST(now() as date) - f.factura_fvencimiento) as calc from tbl_empresa as e inner join tbl_factura as f on e.empresa_cod = f.factura_cliente_cod where f.factura_estado = ?', [0]);
           return $test;
     }
 

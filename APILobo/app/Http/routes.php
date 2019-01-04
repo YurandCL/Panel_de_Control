@@ -24,5 +24,6 @@
 
 Route::get('empresas', 'EmpresasController@getListado');
 
+Route::get('pagos/anual','PagosController@pagosAnuales');
 Route::get('pagos/mes','PagosController@pagosMensuales');
 Route::get('pagos/dia','PagosController@pagosDiarios');

@@ -1,10 +1,10 @@
 package com.lobosistemas.gestiondeventas.model;
 
-public class Empresa {
+public class General {
 
     private String empresa_razonsocial;
     private int empresa_cod;
-    private String calc;
+    private int calc;
 
     public int getEmpresa_cod() {
         return empresa_cod;
@@ -14,11 +14,11 @@ public class Empresa {
         this.empresa_cod = empresa_cod;
     }
 
-    public String getCalc() {
+    public int getCalc() {
         return calc;
     }
 
-    public void setCalc(String calc) {
+    public void setCalc(int calc) {
         this.calc = calc;
     }
 
@@ -29,5 +29,4 @@ public class Empresa {
     public void setEmpresa_razonsocial(String empresa_razonsocial) {
         this.empresa_razonsocial = empresa_razonsocial;
     }
-
 }

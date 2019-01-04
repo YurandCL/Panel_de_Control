@@ -72,6 +72,7 @@ return [
             'password' => env('DB_PASSWORD', ''),
             'charset'  => 'utf8',
             'prefix'   => '',
+            'port'     => '5433',
             'schema'   => 'public',
         ],
 
