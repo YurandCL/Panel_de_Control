@@ -9,7 +9,11 @@ Route::get('reportes/ventas', 'FacturasController@facturasMonto');
 //Obtenemos todos los datos necesarios de una factura seleccionada por su número
 Route::get('reportes/clientes/{factura_num}', 'FacturasController@datos_factura');
 
+<<<<<<< HEAD
 //Obtenemos la suma de todos los pagos que se hicieron durante el mes actual
+=======
+Route::get('pagos/anual','PagosController@pagosAnuales');
+>>>>>>> fc1cb90c7324e8334e86d044a48f8d2b70642e76
 Route::get('pagos/mes','PagosController@pagosMensuales');
 
 //Obtenemos la suma de todos los pagos que se hicieron durante el dia de hoy

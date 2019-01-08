@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="5dp"
+        android:stretchColumns="2">
+
+        <TextView
+            android:id="@+id/empresa"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:shadowColor="#ff0000"
+            android:shadowRadius="2"
+            android:text="Nombre de la empresa" />
+
+        <TextView
+            android:id="@+id/retraso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="20" />
+    </TableRow>
+
+</TableLayout>
+
+<!--<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/textView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="14dp"
+    android:text="" />-->

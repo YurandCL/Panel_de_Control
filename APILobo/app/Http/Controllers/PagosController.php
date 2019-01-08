@@ -20,7 +20,7 @@ class PagosController extends Controller
         $condicion4 = 0;
         //calculamos para los estados
         for ($estado = 1; $estado < 3; $estado++){
-            
+
             for ($tipo_moneda = 1; $tipo_moneda < 3; $tipo_moneda++){
                 //se haya todo lo relacionado a los pagos mientras sea en soles y aun no esté cancelada
                 //condición 1
@@ -28,7 +28,7 @@ class PagosController extends Controller
                     $miArray = array();
                     $a_cuenta = DB::SELECT('
                         SELECT sum(p.pagos_monto)
-                            FROM tbl_factura as f 
+                            FROM tbl_factura as f
                                 INNER join
                                 tbl_pagos as p
                                 ON p.pagos_factura_cod = f.factura_cod
@@ -58,7 +58,7 @@ class PagosController extends Controller
                                 WHERE f.factura_estado != ?
                                   AND f.factura_tpmoneda_cod = ?
                                   AND f.factura_femision >= ?
-                                  ', 
+                                  ',
                                 [2, $tipo_moneda, $fechaFiltro]
                     );
                     $dolares = array();
@@ -80,7 +80,7 @@ class PagosController extends Controller
                         ->WHERE('factura_tpmoneda_cod', '=', $tipo_moneda)
                         ->WHERE('factura_femision', '>=', $fechaFiltro)
                         ->sum('factura_total');
-                    
+
                     $condicion3 = $soles;
                 }
                 //condición 4
@@ -94,7 +94,7 @@ class PagosController extends Controller
                                 WHERE f.factura_estado = ?
                                   AND f.factura_tpmoneda_cod = ?
                                   AND f.factura_femision >= ?
-                                  ', 
+                                  ',
                                   [$estado, $tipo_moneda, $fechaFiltro]
                     );
                     $dolares = array();
@@ -119,9 +119,9 @@ class PagosController extends Controller
         $condicion1 = 0;
         $condicion2 = 0;
         $condicion3 = 0;
-        $condicion4 = 0;  
+        $condicion4 = 0;
         for ($estado = 1; $estado < 3; $estado++){
-            
+
             for ($tipo_moneda = 1; $tipo_moneda < 3; $tipo_moneda++){
                 //se haya todo lo relacionado a los pagos mientras sea en soles y aun no esté cancelada
                 //condición 1
@@ -129,7 +129,7 @@ class PagosController extends Controller
                     $miArray = array();
                     $a_cuenta = DB::SELECT('
                         SELECT sum(p.pagos_monto)
-                            FROM tbl_factura as f 
+                            FROM tbl_factura as f
                                 INNER join
                                 tbl_pagos as p
                                 ON p.pagos_factura_cod = f.factura_cod
@@ -163,7 +163,7 @@ class PagosController extends Controller
                                 WHERE f.factura_estado != ?
                                   AND f.factura_tpmoneda_cod = ?
                                   AND f.factura_femision = (CAST(now() as date))
-                                ', 
+                                ',
                                 [2, $tipo_moneda]
                     );
                     $dolares = array();
@@ -208,7 +208,7 @@ class PagosController extends Controller
                                 WHERE f.factura_estado = ?
                                   AND f.factura_tpmoneda_cod = ?
                                   AND f.factura_femision = (CAST(now() as date))
-                                  ', 
+                                  ',
                                 [$estado, $tipo_moneda]
                     );
                     $dolares = array();
@@ -227,5 +227,3 @@ class PagosController extends Controller
         return $cancelado_hoy;
     }
 }
-
-
