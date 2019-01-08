@@ -16,7 +16,7 @@ class EmpresasController extends Controller
      */
     public function getListado(){
         $test = DB::select(
-          'SELECT f.factura_numero, e.empresa_razonsocial,
+          'SELECT f.factura_numero as factura_num, e.empresa_razonsocial,
             (CAST(now() as date) - f.factura_fvencimiento) as calc
             from tbl_empresa as e
               inner join tbl_factura as f

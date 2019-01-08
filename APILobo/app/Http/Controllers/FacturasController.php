@@ -129,6 +129,9 @@ class FacturasController extends Controller{
                         ON e.empresa_cod = f.factura_cliente_cod
                             WHERE f.factura_numero = ?
                 )as femision,
+                f.factura_numero as factura_num,
+                f.factura_serie as serie,
+                fd.facturadet_cantidad as cantidad,
                 (
                 SELECT f.factura_fvencimiento
                     FROM tbl_factura as f
@@ -154,7 +157,7 @@ class FacturasController extends Controller{
                             WHERE f.factura_numero = ?
                 )as cliente,
                 (
-                SELECT m.tpmoneda_dsc
+                SELECT m.tpmoneda_smbl
                     FROM tbl_tpmoneda as m
                         INNER JOIN
                         tbl_factura as f
