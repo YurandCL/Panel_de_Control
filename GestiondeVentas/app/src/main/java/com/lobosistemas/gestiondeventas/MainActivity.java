@@ -20,11 +20,11 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import com.lobosistemas.gestiondeventas.io.GestiondeVentasApiAdapter;
 import com.lobosistemas.gestiondeventas.io.GestiondeVentasApiService;
 import com.lobosistemas.gestiondeventas.model.Empresa;
-import com.lobosistemas.gestiondeventas.model.Pago;
+import com.lobosistemas.gestiondeventas.model.PagoDia;
 import com.lobosistemas.gestiondeventas.ui.adapter.EmpresaAdapter;
+import com.lobosistemas.gestiondeventas.ui.adapter.PagoAdapter;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -102,15 +102,15 @@ public class MainActivity extends AppCompatActivity{
         });
 
         //------------------------------------RetroFit Pago--------------------------------------//
-        Call<ArrayList<Pago>> call_dos = ApiService.getPagos();
-        call_dos.enqueue(new Callback<ArrayList<Pago>>() {
+        Call<ArrayList<PagoDia>> call_dos = ApiService.getPagosDia();
+        call_dos.enqueue(new Callback<ArrayList<PagoDia>>() {
             @Override
-            public void onResponse(Call<ArrayList<Pago>> call, Response<ArrayList<Pago>> response) {
+            public void onResponse(Call<ArrayList<PagoDia>> call, Response<ArrayList<PagoDia>> response) {
 
             }
 
             @Override
-            public void onFailure(Call<ArrayList<Pago>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<PagoDia>> call, Throwable t) {
 
             }
         });

@@ -16,15 +16,16 @@
             android:layout_height="wrap_content"
             android:shadowColor="#ff0000"
             android:shadowRadius="2"
-            android:text="TextView" />
+            android:text="Nombre de la empresa" />
 
         <TextView
             android:id="@+id/retraso"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="right"
-            android:text="TextView" />
+            android:text="20" />
     </TableRow>
+
 </TableLayout>
 
 <!--<?xml version="1.0" encoding="utf-8"?>
