@@ -57,7 +57,7 @@ return [
             'host'      => 'localhost',
             'database'  => 'lobosoportedb',
             'username'  => 'root',
-            'password'  => 'tecsup',
+            'password'  => '',
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'port'      => '3306',
