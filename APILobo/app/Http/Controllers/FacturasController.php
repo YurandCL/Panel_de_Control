@@ -19,7 +19,7 @@ class FacturasController extends Controller{
         $condicion4 = 0;
         //calculamos para los estados
         for ($estado = 1; $estado < 3; $estado++){
-
+            
             for ($tipo_moneda = 1; $tipo_moneda < 3; $tipo_moneda++){
                 //se haya todo lo relacionado a los pagos mientras sea en soles y aun no esté cancelada
                 //condición 1
@@ -27,7 +27,7 @@ class FacturasController extends Controller{
                     $miArray = array();
                     $a_cuenta = DB::SELECT('
                         SELECT sum(p.pagos_monto)
-                            FROM tbl_factura as f
+                            FROM tbl_factura as f 
                                 INNER join
                                 tbl_pagos as p
                                 ON p.pagos_factura_cod = f.factura_cod
@@ -60,7 +60,7 @@ class FacturasController extends Controller{
                                   AND f.factura_tpmoneda_cod = ?
                                   AND f.factura_femision >= ?
                                   AND f.factura_fvencimiento < ?;
-                                  ',
+                                  ', 
                                   [2, $tipo_moneda, $fechaEmi, $fechaVen]
                     );
                     $dolares = array();
@@ -83,7 +83,7 @@ class FacturasController extends Controller{
                         ->WHERE('factura_femision', '>=', $fechaEmi)
                         ->WHERE('factura_fvencimiento', '<', $fechaVen)
                         ->sum('factura_total');
-
+                    
                     $condicion3 = $soles;
                 }
                 //condición 4
@@ -98,7 +98,7 @@ class FacturasController extends Controller{
                                   AND f.factura_tpmoneda_cod = ?
                                   AND f.factura_femision >= ?
                                   AND f.factura_fvencimiento < ?;
-                                  ',
+                                  ', 
                                   [$estado, $tipo_moneda, $fechaEmi, $fechaVen]
                     );
                     $dolares = array();
@@ -119,43 +119,46 @@ class FacturasController extends Controller{
 
     //funcion para generar el reporte de las emrpresas segun su factura
     public function datos_factura($factura_num){
-        $datos_fac = DB::SELECT(
-          'SELECT
+        $datos_fac = DB::SELECT('
+            SELECT  
             (
-                SELECT f.factura_femision
-                    FROM tbl_factura as f
+                SELECT f.factura_femision 
+                    FROM tbl_factura as f 
                         INNER JOIN
-                        tbl_empresa as e
+                        tbl_empresa as e 
                         ON e.empresa_cod = f.factura_cliente_cod
                             WHERE f.factura_numero = ?
                 )as femision,
+                f.factura_numero as factura_num,
+                f.factura_serie as serie,
+                fd.facturadet_cantidad as cantidad,
                 (
-                SELECT f.factura_fvencimiento
-                    FROM tbl_factura as f
+                SELECT f.factura_fvencimiento 
+                    FROM tbl_factura as f 
                         INNER JOIN
-                        tbl_empresa as e
+                        tbl_empresa as e 
                         ON e.empresa_cod = f.factura_cliente_cod
                             WHERE f.factura_numero = ?
                 )as fvencimiento,
                 (
                 SELECT e.empresa_ruc
-                    FROM tbl_factura as f
+                    FROM tbl_factura as f 
                         INNER JOIN
-                        tbl_empresa as e
+                        tbl_empresa as e 
                         ON e.empresa_cod = f.factura_cliente_cod
                             WHERE f.factura_numero = ?
-                )as ruc,
+                )as ruc, 
                 (
-                SELECT e.empresa_razonsocial
-                    FROM tbl_factura as f
+                SELECT e.empresa_razonsocial 
+                    FROM tbl_factura as f 
                         INNER JOIN
-                        tbl_empresa as e
+                        tbl_empresa as e 
                         ON e.empresa_cod = f.factura_cliente_cod
                             WHERE f.factura_numero = ?
                 )as cliente,
                 (
-                SELECT m.tpmoneda_dsc
-                    FROM tbl_tpmoneda as m
+                SELECT m.tpmoneda_smbl
+                    FROM tbl_tpmoneda as m 
                         INNER JOIN
                         tbl_factura as f
                         ON f.factura_tpmoneda_cod = m.tpmoneda_cod
@@ -165,7 +168,7 @@ class FacturasController extends Controller{
                 fd.facturadet_preciounitario as valor_unitario,
                 (
                 SELECT sum(p.pagos_monto)
-                    FROM tbl_pagos as p
+                    FROM tbl_pagos as p 
                         INNER JOIN
                         tbl_factura as f
                         ON f.factura_cod = p.pagos_factura_cod
@@ -173,21 +176,19 @@ class FacturasController extends Controller{
                 )as a_cuenta,
                 (
                 SELECT f.factura_total
-                    FROM tbl_tpmoneda as m
+                    FROM tbl_tpmoneda as m 
                         INNER JOIN
                         tbl_factura as f
                         ON f.factura_tpmoneda_cod = m.tpmoneda_cod
                         WHERE f.factura_numero = ?
                 )as total
 
-            FROM tbl_facturadet as fd
+            FROM tbl_facturadet as fd 
                 INNER JOIN
                 tbl_factura as f
                 ON f.factura_cod = fd.facturadet_factura_cod
                     WHERE f.factura_numero = ?
-        ',
-        [$factura_num, $factura_num, $factura_num, $factura_num, $factura_num,
-        $factura_num, $factura_num, $factura_num,]);
+        ', [$factura_num, $factura_num, $factura_num, $factura_num, $factura_num, $factura_num, $factura_num, $factura_num,]);
 
         return $datos_fac;
     }
