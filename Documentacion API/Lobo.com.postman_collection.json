@@ -1,0 +1,222 @@
+{
+	"info": {
+		"_postman_id": "9f7d9b7a-0a54-46fa-abc9-e835bae5793c",
+		"name": "Lobo.com",
+		"description": "# Introdución\nLa API tiene la función de consultar distintos tipos de datos para poder hacerlos llegar en formato JSON a una aplicación hecha en android studio, ambas se conectan para poder mostrar al usuario cosas como reportes de las facturas que los clientes tengan atrasados, una lista completa y detallada sobre las facturas que se encuentren vencidas, reportes generales de las ganancias de la empresa por mes y por año, ademas de un sistema de envio por correo electronico en el cual se le enviará la factura atrasada del cliente seleccionado.\n\n# Visión general\nse utilizó DOMPDF, libreria creada por Barry para la elaboración de PDF, las demas librerias utilizadas estan incluidas en laravel como la de envio de correos electronicos o almacenamiento de archivos, etc.\n\n# Autenticación\nLa mejor forma de usar esta API es con un smartphone ya que con el se harán las peticiones GET y POST.\n\n# Códigos de error\nel usuario podria esperar un error en la obtención de ciertos registros ya que en algunos casos no podrá devolverle nada y esto se deberá a que en algunas fechas los datos no se encuentran almacenados, entonces no se podrá devolver ningun registro.\n\n# Límite de tarifa\nEl usuario tiene un limite de request de uno a la vez, es decir que despues de hacer cualquier petición tedrá total libertad paraa hacer alguna otra petición como la carga de clientes deudores o el envio de correos electronicos.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Reporte de ventas",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://gestorlobo.com:8080/reportes/ventas/?fechaInicio=2017-01-01&fechaFin=2017-02-01",
+					"protocol": "http",
+					"host": [
+						"gestorlobo",
+						"com"
+					],
+					"port": "8080",
+					"path": [
+						"reportes",
+						"ventas",
+						""
+					],
+					"query": [
+						{
+							"key": "fechaInicio",
+							"value": "2017-01-01",
+							"description": "se da la fecha de inicio para la busqueda en la base de datos"
+						},
+						{
+							"key": "fechaFin",
+							"value": "2017-02-01",
+							"description": "se da la fecha de fin para la busqueda"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reporte cliente",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://gestorlobo.com:8080/reportes/clientes/3012",
+					"protocol": "http",
+					"host": [
+						"gestorlobo",
+						"com"
+					],
+					"port": "8080",
+					"path": [
+						"reportes",
+						"clientes",
+						"3012"
+					]
+				},
+				"description": "se busca por el número de la factura todos los datos correspondientes para hacer un reporte de dicha factura"
+			},
+			"response": []
+		},
+		{
+			"name": "Obtención de los correos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://gestorlobo.com:8080/usuarios/20454825455",
+					"protocol": "http",
+					"host": [
+						"gestorlobo",
+						"com"
+					],
+					"port": "8080",
+					"path": [
+						"usuarios",
+						"20454825455"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"description": "usamos el ruc unico de cada empresa para poder hacer el filtrado de los usuarios"
+						}
+					]
+				},
+				"description": "se obtienen todos los correos de los usuarios a los cuales tengan enlazados la empresa con el número de ruc unico"
+			},
+			"response": []
+		},
+		{
+			"name": "Obtención de empresas",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://gestorlobo.com:8080/empresas",
+					"protocol": "http",
+					"host": [
+						"gestorlobo",
+						"com"
+					],
+					"port": "8080",
+					"path": [
+						"empresas"
+					]
+				},
+				"description": "Obtenemos todas las empresas, con los datos correspondientes, que tengan almenos una factura vencida y no la haya pagado hasta el momento"
+			},
+			"response": []
+		},
+		{
+			"name": "Reporte de Facturación mensual",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://gestorlobo.com:8080/pagos/mes",
+					"protocol": "http",
+					"host": [
+						"gestorlobo",
+						"com"
+					],
+					"port": "8080",
+					"path": [
+						"pagos",
+						"mes"
+					]
+				},
+				"description": "Se hace un reporte hasta el momento en el cual se obtiene el monto total de todas las facturas emitidas desde el primero del mes actual, hasta el día de hoy, todo el monto se obtiene en soles, y el monto de las facturas que son emitidas en dolares es transformado a soles usando el tipo de cambio correspondiente a la fecha de la emisión de la factura."
+			},
+			"response": []
+		},
+		{
+			"name": "Reporte de Facturación diaria",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://gestorlobo.com:8080/pagos/dia",
+					"protocol": "http",
+					"host": [
+						"gestorlobo",
+						"com"
+					],
+					"port": "8080",
+					"path": [
+						"pagos",
+						"dia"
+					]
+				},
+				"description": "se filtran todas las facturas que se hayan hecho el dia de hoy y se busca su pago al momento, podría ser todo completo o pagado por partes, y se hace la suma total, en caso la factura se haga en dolares americanos, se busca el tipo de cambio actual y se hace la converción correspondiente de dicho monto."
+			},
+			"response": []
+		},
+		{
+			"name": "Generación de factura",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://gestorlobo.com:8080/pdf?factura_num=3012&correo=yurand.coloma@tecsup.edu.pe",
+					"protocol": "http",
+					"host": [
+						"gestorlobo",
+						"com"
+					],
+					"port": "8080",
+					"path": [
+						"pdf"
+					],
+					"query": [
+						{
+							"key": "factura_num",
+							"value": "3012",
+							"description": "numero de la factura por el cual se genera la factura que se enviara por corrreo"
+						},
+						{
+							"key": "correo",
+							"value": "yurand.coloma@tecsup.edu.pe",
+							"description": "correo al cual se le enviará la factura emitida"
+						}
+					]
+				},
+				"description": "generamos una vista en pdf de la factura con número enviado por parametro, para así poder enviar el correo electronico a la empresa a la cual pertenece"
+			},
+			"response": []
+		}
+	]
+}
