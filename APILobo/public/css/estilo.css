@@ -1,0 +1,62 @@
+table{
+	border: 1px solid black;
+}
+
+td{
+	padding: 5px;
+	text-align: left;
+}
+
+th{
+	text-align: right;
+}
+div{
+	position: relative;
+}
+#div_dat{
+	position: absolute;
+	right: 40px;
+	top: 0px;
+	margin-left: 70%;
+	border: 1px solid black;
+}
+
+.monto, .datos_fac{
+	padding: 15px;
+	border-bottom: 1px solid #ddd;
+	text-align: center;
+}
+
+#tbl_izquierda{
+	border: 0px;
+	margin-right:0px;
+	margin-left:auto;
+}
+
+.datos_fac, p{
+	text-align: center;
+
+}
+
+#fac_datos{
+	width: 100%;
+}
+
+#datos_cli{
+	border: 0px;
+}
+
+img{
+	position: relative;
+	width: 20%;
+	height: 20%;
+}
+
+.footer{
+	text-align: center;
+}
+
+.pie_pag{
+	margin-top: auto;
+	margin-bottom: 0px;
+}

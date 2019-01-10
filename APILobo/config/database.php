@@ -54,12 +54,13 @@ return [
 
         'mysql' => [
             'driver'    => 'mysql',
-            'host'      => env('DB_HOST', 'localhost'),
-            'database'  => env('DB_DATABASE', 'forge'),
-            'username'  => env('DB_USERNAME', 'forge'),
-            'password'  => env('DB_PASSWORD', ''),
+            'host'      => 'localhost',
+            'database'  => 'lobosoportedb',
+            'username'  => 'root',
+            'password'  => 'tecsup',
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
+            'port'      => '3306',
             'prefix'    => '',
             'strict'    => false,
         ],
@@ -72,7 +73,6 @@ return [
             'password' => env('DB_PASSWORD', ''),
             'charset'  => 'utf8',
             'prefix'   => '',
-            'port'     => '5433',
             'schema'   => 'public',
         ],
 
