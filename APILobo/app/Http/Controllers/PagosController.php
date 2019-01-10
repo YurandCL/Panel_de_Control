@@ -110,7 +110,8 @@ class PagosController extends Controller
             }
         }
         $cancelado_mes = $condicion1 + $condicion2 + $condicion3 + $condicion4;
-        return $cancelado_mes;
+        $correcto = array('cancelado_mes' => $cancelado_mes, );
+        return \Response::json($correcto);
     }
 
     //suma total en soles de todo lo que se nos pagó hoy (solo día actual)
@@ -224,7 +225,8 @@ class PagosController extends Controller
             }
         }
         $cancelado_hoy = $condicion1 + $condicion2 + $condicion3 + $condicion4;
-        return $cancelado_hoy;
+         $correcto = array('cancelado_hoy' => $cancelado_hoy, );
+        return \Response::json($correcto);
     }
 }
 
