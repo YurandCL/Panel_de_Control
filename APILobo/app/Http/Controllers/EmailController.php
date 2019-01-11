@@ -88,7 +88,8 @@ class EmailController extends Controller
                 ON f.factura_cod = fd.facturadet_factura_cod
                     WHERE f.factura_numero = ?
         	',
-        	[$factura_num, $factura_num, $factura_num, $factura_num, $factura_num, $factura_num, $factura_num, $factura_num,]);
+        	[$factura_num, $factura_num, $factura_num, $factura_num, $factura_num,
+           $factura_num, $factura_num, $factura_num,]);
       //Eliminación del PDF anteriormente creado si esque este no se ha borrado antes
     	if (file_exists('factura.pdf')) {
     		\File::delete(public_path('factura.pdf'));
