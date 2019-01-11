@@ -89,6 +89,10 @@ class EmailController extends Controller
                     WHERE f.factura_numero = ?
         	',
         	[$factura_num, $factura_num, $factura_num, $factura_num, $factura_num, $factura_num, $factura_num, $factura_num,]);
+      //Eliminación del PDF anteriormente creado si esque este no se ha borrado antes
+    	if (file_exists('factura.pdf')) {
+    		\File::delete(public_path('factura.pdf'));
+    	}
 
     	//Creacion de pdf con datos obtenidos en la consulta
     	$pdf = PDF::loadview('emails.contacto', ['datos' => $datos])
@@ -100,7 +104,7 @@ class EmailController extends Controller
     	//(telefonos, correos adicionales, gerente, etc)
     	$info = array(
     		'nombre' 	=>  'Lobo Sistemas S.A.C',
-			'ubicacion' =>	'URB. EL ROSARIO MZA. A LOTE. 5 DPTO.2',           
+			'ubicacion' =>	'URB. EL ROSARIO MZA. A LOTE. 5 DPTO.2',
 			'distrito'	=>	'CAYMA - AREQUIPA - AREQUIPA',
 			'telefono'	=>	'Telefono: (054) 627479 	RPM:995960296 	RPC:959391107',
 			'correo'	=>	'   Email: hola@lobosistemas.com',
@@ -116,11 +120,14 @@ class EmailController extends Controller
     		//se elije el destinatario y el asunto que tendrá el correo
     		$msj->to($correo)->subject('Factura Electronica Lobo Sistemas');
     		//se adjunta el archivo pdf que se enviará mediante este.
-    		$msj->attach('factura.pdf');	
+    		$msj->attach('factura.pdf');
     	});
     	//eliminamos el archivo para que no nos gaste espacio de almacenamiento
     	\File::delete(public_path('factura.pdf'));
-    	$correcto = array('estado' => 'ok', );
+
+      //generamos un archivo JSON para que sea mas sencilla la obtencion de los
+      //datos en otro sistema.
+      $correcto = array('estado' => 'ok', );
     	return \Response::json($correcto);
     }
 }
