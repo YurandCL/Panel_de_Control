@@ -8,9 +8,6 @@ use Mail;
 use PDF;
 use Storage;
 use App\Http\Requests;
-//config/app.php
-//Barryvdh\DomPDF\ServiceProvider::class,
-//'PDF' => Barryvdh\DomPDF\Facade::class,
 class EmailController extends Controller
 {
     public function enviarCorreo_pdf(Request $request){
