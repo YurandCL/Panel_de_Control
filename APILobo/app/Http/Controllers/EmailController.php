@@ -8,6 +8,7 @@ use Mail;
 use PDF;
 use Storage;
 use App\Http\Requests;
+
 class EmailController extends Controller
 {
     public function enviarCorreo_pdf(Request $request){
@@ -85,9 +86,9 @@ class EmailController extends Controller
                 ON f.factura_cod = fd.facturadet_factura_cod
                     WHERE f.factura_numero = ?
         	',
-        	[$factura_num, $factura_num, $factura_num, $factura_num, $factura_num,
-           $factura_num, $factura_num, $factura_num,]);
-      //Eliminación del PDF anteriormente creado si esque este no se ha borrado antes
+        	[$factura_num, $factura_num, $factura_num, $factura_num, $factura_num, $factura_num, $factura_num, $factura_num,]);
+
+    	//Eliminación del PDF anteriormente creado si esque este no se ha borrado antes
     	if (file_exists('factura.pdf')) {
     		\File::delete(public_path('factura.pdf'));
     	}
@@ -102,12 +103,15 @@ class EmailController extends Controller
     	//(telefonos, correos adicionales, gerente, etc)
     	$info = array(
     		'nombre' 	=>  'Lobo Sistemas S.A.C',
-			'ubicacion' =>	'URB. EL ROSARIO MZA. A LOTE. 5 DPTO.2',
+			'ubicacion' =>	'URB. EL ROSARIO MZA. A LOTE. 5 DPTO.2',           
 			'distrito'	=>	'CAYMA - AREQUIPA - AREQUIPA',
 			'telefono'	=>	'Telefono: (054) 627479 	RPM:995960296 	RPC:959391107',
 			'correo'	=>	'   Email: hola@lobosistemas.com',
 			'web'		=>	'  	  Web: www.lobosistemas.com',
     	);
+
+    //verificamos que efectivamente se mande el correo, sinó se enviará un error
+	try{
     	//armamos la estructura del correo, le pasamos una vista seguido del array
     	//que tiene la información de la empresa, y por último la función que le dirá
     	//que es lo que tiene que hacer o enviar
@@ -118,14 +122,16 @@ class EmailController extends Controller
     		//se elije el destinatario y el asunto que tendrá el correo
     		$msj->to($correo)->subject('Factura Electronica Lobo Sistemas');
     		//se adjunta el archivo pdf que se enviará mediante este.
-    		$msj->attach('factura.pdf');
+    		$msj->attach('factura.pdf');	
     	});
+    }catch (\Exception $e){
+    	$error = array('estado' => 'error', );
+    	return \Response::json($error);
+    }
     	//eliminamos el archivo para que no nos gaste espacio de almacenamiento
     	\File::delete(public_path('factura.pdf'));
-
-      //generamos un archivo JSON para que sea mas sencilla la obtencion de los
-      //datos en otro sistema.
-      $correcto = array('estado' => 'ok', );
+    	
+    	$correcto = array('estado' => 'ok', );
     	return \Response::json($correcto);
     }
 }
