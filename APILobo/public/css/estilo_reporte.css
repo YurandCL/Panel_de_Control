@@ -27,3 +27,7 @@ img{
 	height: 20%;
 }
 
+#totales{
+	float: right;
+	margin-left: 20px;
+}

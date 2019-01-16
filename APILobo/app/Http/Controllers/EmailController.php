@@ -238,7 +238,7 @@ class EmailController extends Controller
     	//eliminamos el archivo para que no nos gaste espacio de almacenamiento
     	\File::delete(public_path('reporte_de_facturas.pdf'));
     	
-    	$correcto = array('estado' => 'ok', );
-    	return \Response::json($correcto);
+    	$correcto = [['estado'=>'ok']]
+    	return response(json_encode($correcto))->header('Content-Type','application/json');
     }
 }
