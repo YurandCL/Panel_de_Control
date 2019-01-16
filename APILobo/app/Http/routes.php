@@ -40,11 +40,13 @@ Route::get('usuarios/{ruc}','ContactosController@cargarUsuarios');
 //Se envia el correo electronico al usuario seleccionado con los datos de la factura
 //también seleccionada anteriormente
 //Se genera el reporte de acuerdo al numero de factura pasado como parametro
-Route::get('pdf/','EmailController@enviarCorreo_pdf');
+Route::get('pdf','EmailController@enviarCorreo_pdf');
 //devuelve JSON
 
 //------------------------------------------------------------------------------------
 
+
+Route::get('reporte/factura','EmailController@reporte_facturas');
 //aquí debajo nueva función si fuera necesaria
 // | | | | | | | | | | | | | | | | | | | | | |
 // V V V V V V V V V V V V V V V V V V V V V V

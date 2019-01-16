@@ -8,6 +8,8 @@ use App\Http\Requests;
 
 class ContactosController extends Controller
 {
+	//muestra todos los correos existentes en nuestra base de datos
+	//relacionados con el ruc de la empresa
     public function cargarUsuarios($ruc){
     	$usuarios = DB::connection('mysql')
     		->SELECT('

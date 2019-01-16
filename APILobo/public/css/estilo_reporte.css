@@ -1,0 +1,29 @@
+table{
+	border-left: 1px solid black;
+	border-top: 1px solid black;
+	width: 50%;
+	text-align: center;
+}
+h1{
+	text-align: center;
+}
+td{
+	padding: 5px;
+	text-align: left;
+	border-right: 1px solid black;
+	border-bottom: 1px solid black;
+	size: 0px;
+}
+
+th{
+	text-align: center;
+	border-right: 1px solid black;
+	border-bottom: 1px solid black;
+	size: 0px;
+}
+img{
+	position: relative;
+	width: 20%;
+	height: 20%;
+}
+

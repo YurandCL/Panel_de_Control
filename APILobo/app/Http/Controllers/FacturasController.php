@@ -118,7 +118,7 @@ class FacturasController extends Controller{
         return \Response::json($correcto);
     }
 
-    //funcion para generar el reporte de las emrpresas segun su factura
+    //funcion para extraer datos de las emrpresas segun su numero de factura
     public function datos_factura($factura_num){
         $datos_fac = DB::SELECT('
             SELECT  
