@@ -59,11 +59,12 @@ class EmailController extends Controller
                         WHERE f.factura_numero = ?
                 )as moneda,
                 fd.facturadet_descripciondet as descripcion,
-                fd.facturadet_preciounitario as valor_unitario,
+                fd.facturadet_valorunitario as valor_unitario,
                 fd.facturadet_cantidad as cantidad,
                 f.factura_serie as serie,
                 f.factura_numero as numero,
                 f.factura_opgravadas as opgravadas,
+                f.factura_montoigv as monto_igv,
                 (
                 SELECT sum(p.pagos_monto)
                     FROM tbl_pagos as p
@@ -97,15 +98,13 @@ class EmailController extends Controller
     	//Creacion de pdf con datos obtenidos en la consulta
     	$pdf = PDF::loadview('emails.contacto', ['datos' => $datos])
     		->save('factura.pdf');
-    	//supuestamente guarda la factura en la carpeta temp pero NO
-    	//file_put_contents("archivo.pdf", $pdf);
-    	//$r = Storage::disk('local')->put('facturas.pdf', \File::get($pdf));
+    		
     	//informacion adicional que puede llevar el correo. (nombre de la empresa)
     	//(telefonos, correos adicionales, gerente, etc)
     	$info = array(
     		'nombre' 	=>  'Lobo Sistemas S.A.C',
-			'ubicacion' =>	'URB. EL ROSARIO MZA. A LOTE. 5 DPTO.2',           
-			'distrito'	=>	'CAYMA - AREQUIPA - AREQUIPA',
+			'ubicacion' =>	'Av. Ejercito 103 Of. 305',           
+			'distrito'	=>	'YANAHUARA - AREQUIPA - AREQUIPA',
 			'telefono'	=>	'Telefono: (054) 627479 	RPM:995960296 	RPC:959391107',
 			'correo'	=>	'   Email: hola@lobosistemas.com',
 			'web'		=>	'  	  Web: www.lobosistemas.com',
@@ -130,14 +129,14 @@ class EmailController extends Controller
 	    	});
 
 	    }catch (\Exception $e){
-	    	$error = array('estado' => 'error', );
-	    	return \Response::json($error);
+	    	$error = [['estado' => 'error']];
+	    	return response(json_encode($error))->header('Content-Type','application/json');
 	    }
     	//eliminamos el archivo para que no nos gaste espacio de almacenamiento
     	\File::delete(public_path('factura.pdf'));
     	
-    	$correcto = array('estado' => 'ok', );
-    	return \Response::json($correcto);
+    	$correcto = [['estado'=>'ok']];
+    	return response(json_encode($correcto))->header('Content-Type','application/json');
     }
 
     //envio del reporte de todas las facturas segun el cliente
@@ -163,8 +162,13 @@ class EmailController extends Controller
 			        ON (f.factura_cod = fd.facturadet_factura_cod)
 			        where e.empresa_ruc = ?
 			        	AND f.factura_estado = ?
-			        	ORDER BY f.factura_cod'
-			        	,[$ruc, '0']
+			        	GROUP BY  f.factura_serie, f.factura_numero, 
+			        	f.factura_cod,	fd.facturadet_descripciondet,
+			        	f.factura_femision, f.factura_fvencimiento, 
+			        	f.factura_total, f.factura_tpmoneda_cod,
+			        	e.empresa_razonsocial, e.empresa_ruc
+              		ORDER BY f.factura_numero'
+			       	,[$ruc, '0']
         );
 
         $saldos = array();
@@ -200,7 +204,6 @@ class EmailController extends Controller
     		['reporte' => $reporte, 'saldos' => $saldos, 
     		'soles' => $soles, 'dolares' => $dolares])
     		->save('reporte_de_facturas.pdf');
-  		return $pdf->stream();
     	//informacion adicional que puede llevar el correo. (nombre de la empresa)
     	//(telefonos, correos adicionales, gerente, etc)
     	$info = array(
@@ -232,13 +235,13 @@ class EmailController extends Controller
 	    	});
 
 	    }catch (\Exception $e){
-	    	$error = array('estado' => 'error', );
-	    	return \Response::json($error);
+	    	$error = [['estado' => 'error']];
+	    	return response(json_encode($error))->header('Content-Type','application/json');
 	    }
     	//eliminamos el archivo para que no nos gaste espacio de almacenamiento
     	\File::delete(public_path('reporte_de_facturas.pdf'));
     	
-    	$correcto = [['estado'=>'ok']]
+    	$correcto = [['estado'=>'ok']];
     	return response(json_encode($correcto))->header('Content-Type','application/json');
     }
 }

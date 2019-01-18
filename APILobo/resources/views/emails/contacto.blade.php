@@ -17,45 +17,81 @@
         </div>
     </div>
   <br><br><br>
-  <table id="datos_cli">
     @foreach($datos as $datos_cli)
-      @endforeach
-      <tr>
-        <th>FECHA DE EMISIÓN:</th>
-        <td>{{ $datos_cli-> femision }}</td>
-      </tr>
-      <tr>
-        <th>FECHA DE VENCIMIENTO: </th>
-        <td>{{ $datos_cli-> fvencimiento}}</td>
-      </tr>
-      <tr>
-        <th>CLIENTE: </th>
-        <td>{{ $datos_cli-> cliente}}</td>
-      </tr>
-      <tr>
-        <th>RUC: </th>
-        <td>{{ $datos_cli-> ruc}}</td>
-      </tr>
-      <tr>
-        <th>MONEDA: </th>
-        <td>{{ $datos_cli-> moneda}}</td>
-      </tr>
-  </table>
-  <br>
+    @endforeach
+    <table id="tabla_cliente">
+        <tr class="filas_cliente">
+            <td class="filas_cliente"><h5>DIRECCIÓN</h5></td>
+            <td><h5>:</h5></td>
+            <td><h5>Av. Ejercito 103 of. 305</h5></td>
+        </tr>
+        <tr class="filas_cliente">        
+            <td class="filas_cliente"><h5>TELEFONO</h5></td>
+            <td><h5>:</h5></td>
+            <td><h5>(054) 627479 </h5></td>
+        </tr>
+        <tr class="filas_cliente">
+            <td class="filas_cliente"><h5>CORREO</h5></td>
+            <td><h5>:</h5></td>
+            <td><h5>hola@lobosistemas.com</h5></td>
+        </tr>
+        <tr class="filas_cliente">
+            <td class="filas_cliente"><h5>FECHA DE EMISIÓN</h5></td>
+            <td><h5>:</h5></td>
+            <td><h5>{{ $datos_cli-> femision }}</h5></td>
+        </tr>
+        <tr class="filas_cliente">
+            <td class="filas_cliente"><h5>FECHA DE VENCIMIENTO</h5></td>
+            <td><h5>:</h5></td>
+            <td><h5>{{ $datos_cli-> fvencimiento}}</h5></td>
+        </tr>
+        <tr class="filas_cliente">
+            <td class="filas_cliente"><h5>CLIENTE</h5></td>
+            <td><h5>:</h5></td>
+            <td><h5>{{ $datos_cli-> cliente}}</h5></td>
+        </tr>
+        <tr class="filas_cliente">
+            <td class="filas_cliente"><h5>RUC</h5></td>
+            <td><h5>:</h5></td>
+            <td><h5>{{ $datos_cli-> ruc}}</h5></td>
+        </tr>
+        <tr class="filas_cliente">
+            <td class="filas_cliente"><h5>TIPO DE MONEDA</h5></td>
+            <td><h5>:</h5></td>
+            <td><h5>{{ $datos_cli-> moneda}}</h5></td>
+    </table>
+    <?php 
+        function redondeo($redon){
+            $test = round($redon,2);
+            $test = $test.'';
+            $test2='';
+            for ($i=0; $i <strlen($test) ; $i++) {
+                if ($test{$i} == '.') {
+                    $test2=substr($test, $i+1);
+                }
+            }
+            if($test2 == ''){
+                $test = $test.'.00';
+            }else if (strlen($test2) == 1) {
+                $test = $test.'0';
+            }
+            return $test;
+        }
+    ?>
     <table id="fac_datos">
         <thead>
             <tr >
-                <th class="datos_fac" colspan="2">CANTIDAD:</th>
-                <th class="datos_fac" colspan="3">DESCIPCIÓN:</th>
-                <th class="datos_fac" colspan="2">VALOR UNITARIO:</th>
+                <th class="datos_fac" colspan="2"><h5 class="h5_th">CANTIDAD:</h5></th>
+                <th class="datos_fac" colspan="3"><h5 class="h5_th">DESCRIPCIÓN:</h5></th>
+                <th class="datos_fac" colspan="2"><h5 class="h5_th">VALOR UNITARIO:</h5></th>
             </tr>
         </thead>
         <tbody>
             @foreach($datos as $datos_fac)
                 <tr>
-                    <td class="monto" colspan="2">{{ $datos_fac-> cantidad}}</td>
-                    <td class="monto" colspan="3">{{ $datos_fac-> descripcion}}</td>
-                    <td class="monto" colspan="2">{{ $datos_fac-> valor_unitario}}</td>
+                    <td class="monto" colspan="2"><h5 class="h5">{{ $datos_fac-> cantidad}}</h5></td>
+                    <td class="monto" colspan="3"><h5 class="h5">{{ $datos_fac-> descripcion}}</h5></td>
+                    <td class="monto" colspan="2"><h5 class="h5">{{ redondeo($datos_fac-> valor_unitario)}}</h5></td>
                 </tr>
             @endforeach
         </tbody>
@@ -63,16 +99,16 @@
     <br>
     <table id="tbl_izquierda">
         <tr >
-            <th>A CUENTA:</th>
-            <td>{{ $datos_fac-> a_cuenta}}</td>
+            <th>SUB TOTAL:</th>
+            <td>{{ redondeo($datos_fac-> opgravadas)}}</td>
         </tr>
         <tr>
             <th>IGV: </th>
-            <td>{{ $datos_fac-> total - $datos_fac->opgravadas}}</td>
+            <td>{{ redondeo($datos_fac->monto_igv)}}</td>
         </tr>
         <tr>
             <th>TOTAL:</th>
-            <td>{{ $datos_fac-> total}}</td>
+            <td>{{ redondeo($datos_fac-> total)}}</td>
         </tr>
     </table>
     <br><br>

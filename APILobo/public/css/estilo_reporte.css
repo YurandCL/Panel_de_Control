@@ -31,3 +31,22 @@ img{
 	float: right;
 	margin-left: 20px;
 }
+
+#banco, .cuentas{
+	border: 0px solid black;
+	width: 210px;
+	text-align: left;
+}
+
+.cuentas_td{
+	padding-left: 40px;
+
+}
+
+#banco{
+	border: 1px solid black;
+}
+
+h5{
+	margin: 0px;
+}

@@ -13,6 +13,9 @@ th{
 div{
 	position: relative;
 }
+h5{
+	font-weight: 100;
+}
 #div_dat{
 	position: absolute;
 	right: 40px;
@@ -35,15 +38,20 @@ div{
 
 .datos_fac, p{
 	text-align: center;
-
 }
 
 #fac_datos{
 	width: 100%;
 }
 
-#datos_cli{
+#tabla_cliente{
 	border: 0px;
+}
+
+.filas_cliente, h5{
+	text-align: left;
+	margin-top: -8px;
+	margin-bottom: -5px;
 }
 
 img{
@@ -53,10 +61,16 @@ img{
 }
 
 .footer{
+	font-weight: 100;
 	text-align: center;
 }
 
 .pie_pag{
 	margin-top: auto;
 	margin-bottom: 0px;
+}
+
+.h5_th{
+	margin-left: 30px;
+	font-weight: 900;
 }
