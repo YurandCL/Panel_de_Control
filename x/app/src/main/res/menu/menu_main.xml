@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/enviarFactura"
+        android:icon="@drawable/file_send"
+        android:title="Enviar Factura"/>
+    <item
+        android:id="@+id/enviarEstado"
+        android:icon="@drawable/file_account"
+        android:title="Enviar estado de cuenta"/>
+</menu>
