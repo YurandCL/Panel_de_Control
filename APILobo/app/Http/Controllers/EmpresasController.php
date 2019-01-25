@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-//use Illuminate\Support\Facades\DB;
 use DB;
 use App\Http\Requests;
 
@@ -14,9 +13,36 @@ class EmpresasController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getListado(){
-        $test = DB::select('SELECT f.factura_numero, e.empresa_razonsocial, (CAST(now() as date) - f.factura_fvencimiento) as calc from tbl_empresa as e inner join tbl_factura as f on e.empresa_cod = f.factura_cliente_cod where f.factura_estado = ? order by calc desc', [0]);
-          return $test;
+    public function getListado(Request $request){
+        //estado_2 = pagado,    orden_0 = desendente
+        //estado_1 = emitido,   orden_1 = asendente
+        //estado_0 = vencido
+        $estado = $request->input('estado');
+        $orden = $request->input('orden');
+        
+        if ($orden == '0') {
+            $test = DB::select('
+                SELECT f.factura_numero, e.empresa_razonsocial, (CAST(now() as date) - f.factura_fvencimiento) as calc 
+                    from tbl_empresa as e 
+                        inner join tbl_factura as f 
+                            on e.empresa_cod = 
+                                f.factura_cliente_cod 
+                                where f.factura_estado = ? order by calc desc'
+                                , [$estado]);
+            return $test;
+        } 
+        else 
+            if ($orden == '1') {
+                $test = DB::select('
+                    SELECT f.factura_numero, 
+                        e.empresa_razonsocial, (CAST(now() as date) - f.factura_fvencimiento) as calc 
+                        from tbl_empresa as e 
+                            inner join tbl_factura as f 
+                            on e.empresa_cod = f.factura_cliente_cod where f.factura_estado = ? 
+                        and f.factura_femision >= (CAST(now() as date) - 200)
+                    order by calc asc', [$estado]);
+                return $test;
+        }
     }
 
         /*DB::select('SELECT id FROM professions WHERE title = ?', ['Desarrollador back-end']);

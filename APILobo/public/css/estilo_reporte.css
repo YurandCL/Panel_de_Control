@@ -1,52 +1,115 @@
 table{
-	border-left: 1px solid black;
-	border-top: 1px solid black;
-	width: 50%;
+	width: 100%;
 	text-align: center;
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 10px;
 }
-h1{
+h3{
 	text-align: center;
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 20px;
 }
 td{
-	padding: 5px;
+	padding: 2px;
 	text-align: left;
-	border-right: 1px solid black;
-	border-bottom: 1px solid black;
-	size: 0px;
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 10px;
 }
 
 th{
 	text-align: center;
-	border-right: 1px solid black;
-	border-bottom: 1px solid black;
 	size: 0px;
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 10px;
 }
 img{
 	position: relative;
 	width: 20%;
 	height: 20%;
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 10px;
+}
+h6,h5{
+	text-align: center;
+	margin: 0px;
+	font-weight: 100;
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 10px;
 }
 
 #totales{
+	width: 100px;
 	float: right;
 	margin-left: 20px;
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 10px;
+}
+.montos{
+	width: 50px;
+	font-weight: 900;
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 10px;
 }
 
 #banco, .cuentas{
 	border: 0px solid black;
-	width: 210px;
+	width: 150px;
 	text-align: left;
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 10px;
 }
 
 .cuentas_td{
+	text-align: left;
 	padding-left: 40px;
-
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 10px;
 }
 
 #banco{
 	border: 1px solid black;
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 10px;
 }
 
-h5{
-	margin: 0px;
+.datos, .h5_cuent, .descripcion{
+	text-align: left;
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 10px;
+}
+#nro_cuenta{
+	width: 200px;
+}
+.h5_cuent_datos{
+	margin-left: 20px;
+}
+.datos{
+	border: 0px;
+	width: 120px;
+	font-size: 15px;
+}
+
+.h5_datos{
+	width: 400px;
+}
+
+.tp_moneda, .numeros{
+	text-align: right;
+}
+
+#detalles{
+  	border-collapse: collapse;
+  	width: 100%;
+}
+
+#detalles td, #detalles th{
+	border: 1px solid black;
+}
+
+#detalles tr:nth-child(even){
+	background-color: #f2f2f2;
+}
+
+#detalles tr:hover {
+	background-color: #ddd; 
 }

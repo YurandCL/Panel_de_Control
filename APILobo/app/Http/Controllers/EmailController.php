@@ -51,6 +51,14 @@ class EmailController extends Controller
                             WHERE f.factura_numero = ?
                 )as cliente,
                 (
+                SELECT e.empresa_direccion
+                    FROM tbl_factura as f
+                        INNER JOIN
+                        tbl_empresa as e
+                        ON e.empresa_cod = f.factura_cliente_cod
+                            WHERE f.factura_numero = ?
+                )as direccion_cliente,
+                (
                 SELECT m.tpmoneda_dsc
                     FROM tbl_tpmoneda as m
                         INNER JOIN
@@ -65,6 +73,8 @@ class EmailController extends Controller
                 f.factura_numero as numero,
                 f.factura_opgravadas as opgravadas,
                 f.factura_montoigv as monto_igv,
+                f.factura_descuento as descuento,
+                fd.facturadet_codigo_prod as codigo_prod,
                 (
                 SELECT sum(p.pagos_monto)
                     FROM tbl_pagos as p
@@ -88,7 +98,22 @@ class EmailController extends Controller
 	                ON f.factura_cod = fd.facturadet_factura_cod
 	                    WHERE f.factura_numero = ?
         	',
-        	[$factura_num, $factura_num, $factura_num, $factura_num, $factura_num, $factura_num, $factura_num, $factura_num,]);
+        	[$factura_num, $factura_num, $factura_num, $factura_num, $factura_num, $factura_num, $factura_num, $factura_num, $factura_num,]);
+
+    	$cuentas_bancarias = DB::SELECT('
+				SELECT b.bancos_descripcion as nombre,
+					tm.tpmoneda_smbl as simbolo,
+					cb.cuentasbancarias_nrocuenta as nro_cuenta
+					FROM tbl_bancos as b
+				    	INNER JOIN
+				    	tbl_cuentasbancarias as cb
+				        	ON (b.bancos_cod = 
+				        	cb.cuentasbancarias_banco_cod)
+				        INNER JOIN
+				        tbl_tpmoneda as tm
+				        	ON (cb.cuentasbancarias_tpmoneda_cod
+				       			= tm.tpmoneda_cod)
+			');
 
     	//Eliminación del PDF anteriormente creado si esque este no se ha borrado antes
     	if (file_exists('factura.pdf')) {
@@ -96,20 +121,21 @@ class EmailController extends Controller
     	}
 
     	//Creacion de pdf con datos obtenidos en la consulta
-    	$pdf = PDF::loadview('emails.contacto', ['datos' => $datos])
+    	$pdf = PDF::loadview('emails.factura', ['datos' => $datos], ['cuentas_bancarias' => $cuentas_bancarias])
     		->save('factura.pdf');
-    		
-    	//informacion adicional que puede llevar el correo. (nombre de la empresa)
+    	//return $pdf->stream();
+    	//informacion adicional que puede llevar el correo. (nombre de la empresa, numeros de telefono, etc.)
     	//(telefonos, correos adicionales, gerente, etc)
     	$info = array(
-    		'nombre' 	=>  'Lobo Sistemas S.A.C',
-			'ubicacion' =>	'Av. Ejercito 103 Of. 305',           
-			'distrito'	=>	'YANAHUARA - AREQUIPA - AREQUIPA',
-			'telefono'	=>	'Telefono: (054) 627479 	RPM:995960296 	RPC:959391107',
-			'correo'	=>	'   Email: hola@lobosistemas.com',
-			'web'		=>	'  	  Web: www.lobosistemas.com',
+    		'nombre' 			=>  'Lobo Sistemas S.A.C',
+			'saludo' 			=>	'Estimado cliente '.$datos[0] -> cliente.' le adjuntamos el documento electrónico de su factura',
+			'mensaje'			=>	'Nro. de Factura: '.$datos[0] -> serie.'-'.$datos[0] -> numero.'<br>
+			Fecha de Emisión: '.$datos[0] -> femision.'<br>
+			Fecha de Vencimiento: '.$datos[0] -> fvencimiento,
+			'telefono'			=> 'fijo:(054)627479',
+			'celular' 			=> 'cel: 958310833',
     	);
-
+		//return $info;
 	    //verificamos que efectivamente se mande el correo, sinó se enviará un error
 		try{
 	    	//armamos la estructura del correo, le pasamos una vista seguido del array
@@ -191,28 +217,42 @@ class EmailController extends Controller
         		array_push($saldos, $value -> suma);
         	}
 		}
-
+		$cuentas_bancarias = DB::SELECT('
+				SELECT b.bancos_descripcion as nombre,
+					tm.tpmoneda_smbl as simbolo,
+					cb.cuentasbancarias_nrocuenta as nro_cuenta
+					FROM tbl_bancos as b
+				    	INNER JOIN
+				    	tbl_cuentasbancarias as cb
+				        	ON (b.bancos_cod = 
+				        	cb.cuentasbancarias_banco_cod)
+				        INNER JOIN
+				        tbl_tpmoneda as tm
+				        	ON (cb.cuentasbancarias_tpmoneda_cod
+				       			= tm.tpmoneda_cod)
+			');
 		//Eliminación del PDF anteriormente creado si esque este no se ha borrado antes
     	if (file_exists('reporte_de_facturas.pdf')) {
     		\File::delete(public_path('reporte_de_facturas.pdf'));
     	}
  		$soles = array();
  		$dolares = array();
-    	$hoy = date("d-m-Y");
     	//Creacion de pdf con datos obtenidos en la consulta
     	$pdf = PDF::loadview('emails.reporte_factura', 
     		['reporte' => $reporte, 'saldos' => $saldos, 
+    		'cuentas_bancarias' => $cuentas_bancarias,
     		'soles' => $soles, 'dolares' => $dolares])
     		->save('reporte_de_facturas.pdf');
+    	//return $pdf->stream();
     	//informacion adicional que puede llevar el correo. (nombre de la empresa)
     	//(telefonos, correos adicionales, gerente, etc)
     	$info = array(
-    		'nombre' 	=>  'Lobo Sistemas S.A.C',
-			'ubicacion' =>	'URB. EL ROSARIO MZA. A LOTE. 5 DPTO.2',           
-			'distrito'	=>	'CAYMA - AREQUIPA - AREQUIPA',
-			'telefono'	=>	'Telefono: (054) 627479 	RPM:995960296 	RPC:959391107',
-			'correo'	=>	'   Email: hola@lobosistemas.com',
-			'web'		=>	'  	  Web: www.lobosistemas.com',
+    		'saludo'	=> 'Estimado cliente '.$reporte[0] -> cliente,
+			'mensaje' =>	'Adjuntamos su estado de cuenta para su pronta cancelacion<br>
+			Atentamente:',
+			'nombre' 	=>  'Lobo Sistemas S.A.C',
+			'telefono'	=>	'Telefono: (054) 627479',
+			'celular'	=>	'Celular: 958310833',
     	);
 
 
@@ -228,12 +268,16 @@ class EmailController extends Controller
 	    		$msj->from('frezer828@gmail.com', 'Lobo Sistemas');
 	    		
 	    		//se elije el destinatario y el asunto que tendrá el correo
-	    		$msj->to($correo)->subject('Factura Electronica Lobo Sistemas');
+	    		$msj->to($correo)->subject('Reporte de Facturas');
 	    		
 	    		//se adjunta el archivo pdf que se enviará mediante este.
 	    		$msj->attach('reporte_de_facturas.pdf');	
 	    	});
 
+	    /*capturamos el error que se genera cuando el envio 
+	    falla y mandamos un json con mensaje de error para que 
+	    la aplicacion consumidora sepa que hubo un error al 
+	    momento de enviar el mensaje*/
 	    }catch (\Exception $e){
 	    	$error = [['estado' => 'error']];
 	    	return response(json_encode($error))->header('Content-Type','application/json');

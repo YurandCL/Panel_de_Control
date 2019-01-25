@@ -6,17 +6,15 @@
     <link rel="stylesheet" type="text/css" href="css/estilo.css">
 </head>
 <body>
+	<?= $saludo;   ?>
+	<p></p>
+	<?= $mensaje;   ?>
+	<p></p>
 	<?= $nombre;   ?>
-	<p></p>
-	<?= $ubicacion;   ?>
-	<p></p>
-	<?= $distrito;   ?>
 	<p></p>
 	<?= $telefono;   ?>
 	<p></p>
-	<?= $correo;   ?>
-	<p></p>
-	<?= $web;   ?>
+	<?= $celular;   ?>
 	<p></p>
 </body>
 </html>

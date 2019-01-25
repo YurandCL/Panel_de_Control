@@ -45,8 +45,21 @@ Route::get('pdf','EmailController@enviarCorreo_pdf');
 
 //------------------------------------------------------------------------------------
 
-
+//Se envia el correo electronico al usuario seleccionado con 
+//algunos datos de sus facturas
+//Se genera el reporte de acuerdo al ruc de la empresa pasado como parametro
 Route::get('reporte/factura','EmailController@reporte_facturas');
+//devuelve JSON
+
+//------------------------------------------------------------------------------------
+
+//Se hace la verificación del usuario y contraseña mandadas por 
+//parametro a la ruta, ambas se buscan en la base de datos y se 
+//verifica si dicho usuario se encuentra activo en la empresa
+Route::get('login','LoginController@logeo');
+//devuelve JSON
+
+//------------------------------------------------------------------------------------
 //aquí debajo nueva función si fuera necesaria
 // | | | | | | | | | | | | | | | | | | | | | |
 // V V V V V V V V V V V V V V V V V V V V V V
