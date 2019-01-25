@@ -101,19 +101,18 @@ class EmailController extends Controller
         	[$factura_num, $factura_num, $factura_num, $factura_num, $factura_num, $factura_num, $factura_num, $factura_num, $factura_num,]);
 
     	$cuentas_bancarias = DB::SELECT('
-				SELECT b.bancos_descripcion as nombre,
-					tm.tpmoneda_smbl as simbolo,
-					cb.cuentasbancarias_nrocuenta as nro_cuenta
-					FROM tbl_bancos as b
-				    	INNER JOIN
-				    	tbl_cuentasbancarias as cb
-				        	ON (b.bancos_cod = 
-				        	cb.cuentasbancarias_banco_cod)
-				        INNER JOIN
-				        tbl_tpmoneda as tm
-				        	ON (cb.cuentasbancarias_tpmoneda_cod
-				       			= tm.tpmoneda_cod)
-			');
+			SELECT b.bancos_descripcion as nombre,
+                tm.tpmoneda_smbl as simbolo,
+                cb.cuentasbancarias_nrocuenta as nro_cuenta,
+                cb.cuentasbancarias_cci as cci
+            FROM tbl_bancos as b
+                INNER JOIN
+                tbl_cuentasbancarias as cb
+                ON (b.bancos_cod = cb.cuentasbancarias_banco_cod)
+                INNER JOIN
+                tbl_tpmoneda as tm
+                ON (cb.cuentasbancarias_tpmoneda_cod = tm.tpmoneda_cod)
+		');
 
     	//Eliminación del PDF anteriormente creado si esque este no se ha borrado antes
     	if (file_exists('factura.pdf')) {
@@ -130,8 +129,10 @@ class EmailController extends Controller
     		'nombre' 			=>  'Lobo Sistemas S.A.C',
 			'saludo' 			=>	'Estimado cliente '.$datos[0] -> cliente.' le adjuntamos el documento electrónico de su factura',
 			'mensaje'			=>	'Nro. de Factura: '.$datos[0] -> serie.'-'.$datos[0] -> numero.'<br>
-			Fecha de Emisión: '.$datos[0] -> femision.'<br>
-			Fecha de Vencimiento: '.$datos[0] -> fvencimiento,
+			                        Fecha de Emisión: '.$datos[0] -> femision.'<br>
+			                        Fecha de Vencimiento: '.$datos[0] -> fvencimiento.
+                                    '<br>Monto Total: '.$datos[0] -> total.' '.$datos[0] -> moneda,
+
 			'telefono'			=> 'fijo:(054)627479',
 			'celular' 			=> 'cel: 958310833',
     	);

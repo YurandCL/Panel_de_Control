@@ -139,7 +139,7 @@
                     </h5>
                 </td>
                 <td class="cuentas">
-                    <h5>CCI: {$cuentas_bancarias[$i]->cci}</h5>
+                    <h5>CCI: {{$cuentas_bancarias[$i]->cci}}</h5>
                 </td>
             </tr>
         @endfor
@@ -170,7 +170,7 @@
                 $num_letra = " con ".decena_centimos($importe_parcial);
             }else{
 
-                $num_letra = "";
+                $num_letra = " con 0/100 SOLES";
             }
             return $num_letra;
         }
