@@ -13,21 +13,24 @@ class LoginController extends Controller
     	$password = $request->input('password');
     	
     	$autorizados = DB::SELECT('
-    		SELECT u.usuario, u.password
+    		SELECT u.usuario, u.password, p.persona_nombres as nombres
 				FROM tbl_usuarios as u
-			    	WHERE u.activo = ?
+                INNER JOIN
+                    tbl_persona as p
+                    ON u.persona_cod = p.persona_cod
+			    	    WHERE u.activo = ?
     	',['Y']);
 
     	for ($i=0; $i < sizeof($autorizados); $i++) { 
-    		if ($autorizados[$i]->usuario == $usuario && 
-    			$autorizados[$i]->password == $password) {
+    		if ($autorizados[$i] -> usuario == $usuario && 
+    			$autorizados[$i] -> password == $password) {
     			
-    			$correcto = [['estado' => 'ok']];
+    			$correcto = [['acceso' => $autorizados[$i] -> nombres]];
 	    		return response(json_encode($correcto))
 	    			->header('Content-Type','application/json');
     		}
     	}
-    	$error = [['estado' => 'error']];
+    	$error = [['acceso' => 'error']];
 	    return response(json_encode($error))
 	    	->header('Content-Type','application/json');
     }
