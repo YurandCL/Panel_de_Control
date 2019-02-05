@@ -2,7 +2,6 @@ package com.lobosistemas.x.io;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import com.lobosistemas.x.io.LoboVentasApiService;
 
 public class LoboVentasApiAdapter {
 

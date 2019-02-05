@@ -21,7 +21,7 @@
             android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:shadowColor="#ff0000"
+            android:shadowColor="#000000"
             android:shadowRadius="2"
             android:text="IMAGEN ALTERNATIVA S.A.C."
             android:textSize="24sp" />
@@ -197,15 +197,36 @@
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:indeterminateDrawable="@drawable/cpb_mitad"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp" />
 
+        <ImageView
+            android:id="@+id/alertReporte"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/lblConexionReporte"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="-50dp"
+            android:src="@drawable/ic_alert"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/lblConexionReporte"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:gravity="center"
+            android:text="No es posible conectarse con la base de datos.\nAsegúrese de tener conexión a internet."
+            android:textColor="#d02e26"
+            android:visibility="invisible"/>
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="0dp"
             android:layout_marginTop="1dp"
             android:layout_weight="1"
             android:clipToPadding="false"
@@ -221,6 +242,7 @@
                     android:id="@+id/recycler_view_reportes"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_gravity="center_horizontal"
                     android:layout_weight="1" />
             </LinearLayout>
         </ScrollView>
@@ -236,6 +258,7 @@
             android:layout_alignParentBottom="true"
             app:fabGravity="bottom_end"
             app:fabMenu="@menu/menu_main"
+            app:fabDrawable="@drawable/email"
             app:miniFabBackgroundTint="@android:color/white"
             app:miniFabDrawableTint="?attr/colorPrimaryDark"
             app:miniFabTitleTextColor="?attr/colorPrimaryDark" />

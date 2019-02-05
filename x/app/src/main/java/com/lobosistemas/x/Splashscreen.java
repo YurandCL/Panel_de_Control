@@ -1,8 +1,9 @@
 package com.lobosistemas.x;
 
-
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.view.Window;
@@ -10,9 +11,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
-
-import com.lobosistemas.x.MainActivity;
 
 public class Splashscreen extends Activity{
     public void onAttachedToWindow() {
@@ -22,6 +20,9 @@ public class Splashscreen extends Activity{
     }
     /** Called when the activity is first created. */
     Thread splashTread;
+    SharedPreferences preferencias;
+    String usuario;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,21 +48,33 @@ public class Splashscreen extends Activity{
                 try {
                     int waited = 0;
                     // Splash screen pause time
-                    while (waited < 1500) {
+                    while (waited < 1800) {
                         sleep(100);
                         waited += 100;
                     }
-                    Intent intent = new Intent(com.lobosistemas.x.Splashscreen.this,
-                            MainActivity.class);
+
+                    //------------------Preferencias------------------//
+                    preferencias = getSharedPreferences("Datos", Context.MODE_PRIVATE);
+                    usuario = preferencias.getString("Usuario","");
+
+                    Intent intent;
+
+                    if(usuario == ""){
+                        intent = new Intent(Splashscreen.this,
+                                LoginActivity.class);
+                    } else {
+                        intent = new Intent(Splashscreen.this,
+                                Main2Activity.class);
+                    }
+
                     intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(intent);
-                    com.lobosistemas.x.Splashscreen.this.finish();
+                    Splashscreen.this.finish();
                 } catch (InterruptedException e) {
-                    Toast.makeText(null,"no funciono willy", Toast.LENGTH_LONG).show();
+                    // do nothing
                 } finally {
-                    com.lobosistemas.x.Splashscreen.this.finish();
+                    Splashscreen.this.finish();
                 }
-
             }
         };
         splashTread.start();

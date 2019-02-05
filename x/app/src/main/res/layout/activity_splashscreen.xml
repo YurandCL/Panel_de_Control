@@ -11,8 +11,8 @@
 
     <ImageView
         android:id="@+id/splash"
-        android:layout_width="wrap_content"
-        android:layout_height="300dp"
+        android:layout_width="725px"
+        android:layout_height="410px"
         android:background="@drawable/lobo_logo" />
 
 </LinearLayout>

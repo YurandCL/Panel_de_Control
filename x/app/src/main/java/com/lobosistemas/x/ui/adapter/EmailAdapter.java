@@ -1,4 +1,4 @@
-package com.lobosistemas.x.adapter;
+package com.lobosistemas.x.ui.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -6,14 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
+import java.util.ArrayList;
 import com.lobosistemas.x.R;
 import com.lobosistemas.x.model.Emails;
 
-import java.util.ArrayList;
-
-
-public class EmailAdapter extends RecyclerView.Adapter<com.lobosistemas.x.adapter.EmailAdapter.ViewHolder> implements View.OnClickListener{
+public class EmailAdapter extends RecyclerView.Adapter<EmailAdapter.ViewHolder> implements View.OnClickListener{
 
     private ArrayList<Emails> mDataSet;
     private View.OnClickListener listener;

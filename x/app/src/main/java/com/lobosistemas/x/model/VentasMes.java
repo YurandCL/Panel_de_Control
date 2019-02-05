@@ -1,13 +1,13 @@
 package com.lobosistemas.x.model;
 
 public class VentasMes {
-    private String suma_mes_especifico;
+    private String cancelado;
 
-    public String getSuma_mes_especifico() {
-        return suma_mes_especifico;
+    public String getCancelado() {
+        return cancelado;
     }
 
-    public void setSuma_mes_especifico(String suma_mes) {
-        this.suma_mes_especifico = suma_mes;
+    public void setCancelado(String cancelado) {
+        this.cancelado = cancelado;
     }
 }

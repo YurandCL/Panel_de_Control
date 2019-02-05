@@ -8,5 +8,5 @@
     <item
         android:id="@+id/enviarEstado"
         android:icon="@drawable/file_account"
-        android:title="Enviar estado de cuenta"/>
+        android:title="Enviar Estado de Cuenta"/>
 </menu>

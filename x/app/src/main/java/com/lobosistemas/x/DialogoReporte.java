@@ -10,7 +10,10 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -19,18 +22,15 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.lobosistemas.x.adapter.EmailAdapter;
+import java.util.ArrayList;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import com.lobosistemas.x.io.LoboVentasApiAdapter;
 import com.lobosistemas.x.io.LoboVentasApiService;
 import com.lobosistemas.x.model.Emails;
 import com.lobosistemas.x.model.Estado;
-
-import java.util.ArrayList;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import com.lobosistemas.x.ui.adapter.EmailAdapter;
 
 public class DialogoReporte {
 
@@ -48,7 +48,7 @@ public class DialogoReporte {
     ProgressBar progressEstado;
     LinearLayout contenedor;
 
-    String email, state;
+    String email, state="";
 
     public DialogoReporte(final Context context, final String RUC, final String factura_num, final String accion){
 
@@ -72,6 +72,35 @@ public class DialogoReporte {
         }else{
             lblDescripcion.setText("Enviar Factura");
         }
+
+        TextWatcher myTextWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                txtEmail.setTextColor(Color.parseColor("#00417d"));
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                btnEnviar.setEnabled(false);
+                btnEnviar.setTextColor(Color.parseColor("#a5a6a6"));
+                btnEnviar.setBackgroundColor(Color.parseColor("#d6d7d7"));
+
+                for(int i=0; i<s.toString().length(); i++){
+                    if(s.toString().contains("@") && i>0){
+                        btnEnviar.setEnabled(true);
+                        btnEnviar.setTextColor(Color.parseColor("#ffffff"));
+                        btnEnviar.setBackgroundColor(Color.parseColor("#2382c8"));
+                    }
+                }
+            }
+        };
+        txtEmail.addTextChangedListener(myTextWatcher);
 
         lblCancelar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,10 +131,10 @@ public class DialogoReporte {
                         txtEmail.setEnabled(false);
                         btnEnviar.setEnabled(false);
                         state="enviando";
+                        Log.d("onResponse Estado","Se intentará enviar: "+accion);
 
                         if(accion.equals("estado")){
                             //------------------------------------RetroFit EstadoFactura--------------------------------------//
-                            Log.d("Estado",""+RUC+" "+email);
                             Call<ArrayList<Estado>> callEstadoFactura = ApiService.getEstadoFactura(""+RUC,""+email);
                             callEstadoFactura.enqueue(new Callback<ArrayList<Estado>>() {
                                 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -133,6 +162,15 @@ public class DialogoReporte {
 
                                 @Override
                                 public void onFailure(Call<ArrayList<Estado>> call, Throwable t) {
+                                    new DialogoEstado(context,"conexion",""+email,""+accion);
+
+                                    progressEstado.setVisibility(View.INVISIBLE);
+                                    dialogo.setCancelable(true);
+                                    lblCancelar.setClickable(true);
+                                    txtEmail.setEnabled(true);
+                                    btnEnviar.setEnabled(true);
+                                    state="";
+
                                     Log.d("onResponse Estado","Algo salió mal: "+t.getMessage());
                                 }
                             });
@@ -179,7 +217,9 @@ public class DialogoReporte {
                     }
                 });
 
-                AlertDialog dialog=builder.create();
+                AlertDialog dialog = builder.show();
+                TextView messageView = (TextView)dialog.findViewById(android.R.id.message);
+                messageView.setGravity(Gravity.CENTER);
                 dialog.show();
             }
         });
@@ -196,7 +236,7 @@ public class DialogoReporte {
         mRecyclerView.setAdapter(mAdapter);
 
         //------------------------------------Conexión con la API------------------------------------//
-        ApiService = (LoboVentasApiService) LoboVentasApiAdapter.getApiService();
+        ApiService = LoboVentasApiAdapter.getApiService();
 
         //------------------------------------RetroFit Emails--------------------------------------//
         Call<ArrayList<Emails>> callEmail = ApiService.getEmails(""+RUC);
@@ -216,7 +256,7 @@ public class DialogoReporte {
 
                         lblOtro.setText("Otro:");
                         lblEmails.setText("Lista de Emails");
-                        contenedor.setBackgroundColor(Color.parseColor("#faa519"));
+                        contenedor.setBackgroundColor(Color.parseColor("#000000"));
                         mAdapter.setmDataSet(emails); //Agregamos el adaptador al Recycler View//
                     }
                     Log.d("onResponse emails","Se cargaron "+ emails.size() +" emails.");
@@ -251,9 +291,11 @@ public class DialogoReporte {
                         builder.setMessage("¿Está seguro de enviar la factura a: "+ email +"?");
                     }
 
+
                     builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(final DialogInterface dialog, int which) {
+
                             progressEstado.setVisibility(View.VISIBLE);
                             dialogo.setCancelable(false);
                             lblCancelar.setClickable(false);
@@ -322,8 +364,6 @@ public class DialogoReporte {
                                     }
                                 });
                             }
-
-                            dialogo.dismiss();
                         }
                     });
                     builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -333,9 +373,10 @@ public class DialogoReporte {
                         }
                     });
 
-                    AlertDialog dialog=builder.create();
+                    AlertDialog dialog = builder.show();
+                    TextView messageView = (TextView)dialog.findViewById(android.R.id.message);
+                    messageView.setGravity(Gravity.CENTER);
                     dialog.show();
-
                 }
             }
         });

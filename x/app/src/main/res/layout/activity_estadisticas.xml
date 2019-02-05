@@ -23,8 +23,7 @@
             android:id="@+id/meses"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18dp"
-            android:padding="20dp"></Spinner>
+            android:textSize="18dp"></Spinner>
     </LinearLayout>
 
     <com.github.mikephil.charting.charts.BarChart

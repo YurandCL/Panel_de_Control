@@ -1,17 +1,16 @@
 package com.lobosistemas.x;
 
 import android.os.Build;
-import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -19,19 +18,17 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
-import com.lobosistemas.x.io.LoboVentasApiAdapter;
-import com.lobosistemas.x.io.LoboVentasApiService;
-import com.lobosistemas.x.model.VentasMes;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import com.lobosistemas.x.io.LoboVentasApiAdapter;
+import com.lobosistemas.x.io.LoboVentasApiService;
+import com.lobosistemas.x.model.VentasMes;
 
 public class Estadisticas extends AppCompatActivity {
 
@@ -42,7 +39,7 @@ public class Estadisticas extends AppCompatActivity {
     BarChart barChart;
     ArrayList<VentasMes> ventas = new ArrayList<>();
 
-    int anioActual;
+    int anioActual, mesActual;
     String fechaInicio, fechaFin;
     Spinner meses;
 
@@ -55,8 +52,11 @@ public class Estadisticas extends AppCompatActivity {
 
         //---------------Calendario---------------//
         Date date = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy");
         anioActual = Integer.parseInt(simpleDateFormat.format(date).toUpperCase());
+
+        simpleDateFormat = new SimpleDateFormat("M");
+        mesActual  = Integer.parseInt(simpleDateFormat.format(date).toUpperCase());
 
         for(int i=2016; i <= anioActual; i++){
             anios.add(""+i);
@@ -66,7 +66,7 @@ public class Estadisticas extends AppCompatActivity {
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.meses, R.layout.spinner_item_meses);
         meses.setAdapter(adapter);
-
+        meses.setSelection(mesActual-1);
 
         //------------------------------------Conexión con la API------------------------------------//
         ApiService = LoboVentasApiAdapter.getApiService();
@@ -105,11 +105,8 @@ public class Estadisticas extends AppCompatActivity {
 
                     //------------------------------------RetroFit Ventas--------------------------------------//
                     Call<ArrayList<VentasMes>> callVentas = ApiService.getVentas(""+fechaInicio, ""+fechaFin);
-                    Log.d("anioYvalor", "fechaInicio: "+fechaInicio+" fechaFin: "+fechaFin);
-                    final int finalJ = j;
                     final int finalPosition = position;
                     final int finalI = i;
-                    final int finalI1 = i;
                     callVentas.enqueue(new Callback<ArrayList<VentasMes>>() {
                         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                         @Override
@@ -118,7 +115,7 @@ public class Estadisticas extends AppCompatActivity {
 
                                 ventas = response.body();
 
-                                anioYvalor.put(finalI,Float.parseFloat(ventas.get(0).getSuma_mes_especifico()));
+                                anioYvalor.put(finalI,Float.parseFloat(ventas.get(0).getCancelado()));
 
                                 if(anioYvalor.size() == anios.size()){
                                     crearGrafico(""+parent.getItemAtPosition(finalPosition -1));
@@ -129,6 +126,7 @@ public class Estadisticas extends AppCompatActivity {
                         @Override
                         public void onFailure(Call<ArrayList<VentasMes>> call, Throwable t) {
                             Log.d("onResponse Ventas","Algo salió mal: "+t.getMessage());
+                            barChart.setNoDataText("Error de Conexión. Asegúrese de tener conexión Internet.");
                         }
                     });
                 }
@@ -156,10 +154,6 @@ public class Estadisticas extends AppCompatActivity {
             barEntries.add(new BarEntry(j+1, anioYvalor.get(i)));
         }
 
-        Log.d("anioYvalor",""+ColorTemplate.rgb("#d20e26"));
-        Log.d("anioYvalor",""+ColorTemplate.rgb("#004d7f"));
-        Log.d("anioYvalor",""+ColorTemplate.rgb("#73BE46"));
-
         BarDataSet barDataSet = new BarDataSet(barEntries, ""+label);
         barDataSet.setColors(ColorTemplate.rgb("#73BE46"),ColorTemplate.rgb("#d20e26"),ColorTemplate.rgb("#004d7f"),ColorTemplate.rgb("#faa519")
                 ,ColorTemplate.rgb("#d7e141"),ColorTemplate.rgb("#8cd7f5"),ColorTemplate.rgb("#f58223"));
@@ -173,10 +167,10 @@ public class Estadisticas extends AppCompatActivity {
         barChart.animateY(900);
 
         xVals.add("Años");
-        xVals.add("2016");
-        xVals.add("2017");
-        xVals.add("2018");
-        xVals.add("2019");
+
+        for(int i=0; i < anios.size(); i++){
+            xVals.add(""+anios.get(i));
+        }
 
         XAxis xAxis = barChart.getXAxis();
         xAxis.setAxisMinimum(0f);

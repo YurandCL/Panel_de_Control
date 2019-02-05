@@ -1,13 +1,13 @@
 package com.lobosistemas.x.model;
 
 public class PagoDia {
-    private String suma_dia;
+    private String cancelado_hoy;
 
-    public String getSuma_dia() {
-        return suma_dia;
+    public String getCancelado_hoy() {
+        return cancelado_hoy;
     }
 
-    public void setSuma_dia(String suma_dia) {
-        this.suma_dia = suma_dia;
+    public void setCancelado_hoy(String suma_dia) {
+        this.cancelado_hoy = cancelado_hoy;
     }
 }

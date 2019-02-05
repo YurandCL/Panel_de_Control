@@ -1,4 +1,4 @@
-package com.lobosistemas.x.adapter;
+package com.lobosistemas.x.ui.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -6,15 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import com.lobosistemas.x.R;
 import com.lobosistemas.x.model.Reportes;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-
-
-public class ReportesAdapter extends RecyclerView.Adapter<com.lobosistemas.x.adapter.ReportesAdapter.ViewHolder> implements View.OnClickListener{
+public class ReportesAdapter extends RecyclerView.Adapter<ReportesAdapter.ViewHolder> implements View.OnClickListener{
 
     private ArrayList<Reportes> mDataSet;
     private View.OnClickListener listener;
@@ -55,9 +52,9 @@ public class ReportesAdapter extends RecyclerView.Adapter<com.lobosistemas.x.ada
 
         Float valor = Float.parseFloat(mDataSet.get(i).getValor_unitario());
 
-        holder.descripcion.setText(mDataSet.get(i).getDescripcion().trim()+"                                   ");
+        holder.descripcion.setText(mDataSet.get(i).getDescripcion().trim()+"                                                        ");
         holder.cantidad.setText(""+mDataSet.get(i).getCantidad());
-        holder.valor_unitario.setText(mDataSet.get(i).getMoneda()+" "+String.valueOf(round(valor,2)));
+        holder.valor_unitario.setText(mDataSet.get(i).getMoneda()+" "+darFormato(String.valueOf(round(valor,2))));
     }
 
     public float round(float d, int decimalPlace) {
@@ -80,5 +77,22 @@ public class ReportesAdapter extends RecyclerView.Adapter<com.lobosistemas.x.ada
         if(listener != null){
             listener.onClick(v);
         }
+    }
+
+    public String darFormato(String num){
+        int cont=-1;
+
+        for(int i=0; i<num.length(); i++){
+            if(num.charAt(i) == '.'){
+                cont++;
+            }else if(cont>=0){
+                cont++;
+            }
+        }
+
+        if(cont==-1){num+=".00";}
+        else if(cont==1){num+="0";}
+
+        return num;
     }
 }

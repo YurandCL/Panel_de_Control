@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ListaVencidas">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/txtBuscar1"
+                android:layout_width="285dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:ems="10"
+                android:hint="Buscar..."
+                android:inputType="textPersonName" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                app:srcCompat="@mipmap/ic_feature_search_outline" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ProgressBar
+                android:id="@+id/progressEmpresas"
+                style="?android:attr/progressBarStyle"
+                android:indeterminateDrawable="@drawable/cpb_mitad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="50dp" />
+
+            <ImageView
+                android:id="@+id/alertVencidas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/lblConexionVencida"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="-70dp"
+                android:src="@drawable/ic_alert"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/lblConexionVencida"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="70dp"
+                android:gravity="center"
+                android:text="No es posible conectarse con la base de datos.\nAsegúrese de tener conexión a internet."
+                android:textColor="#d02e26"
+                android:visibility="invisible" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="#d02e26"
+                        android:gravity="bottom">
+
+                        <TextView
+                            android:id="@+id/textView27"
+                            android:layout_width="55dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="2dp"
+                            android:background="#ffffff"
+                            android:textColor="#000000"
+                            android:gravity="center"
+                            android:text="Factura"
+                            android:textSize="12dp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/textView14"
+                            android:layout_width="255dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="2dp"
+                            android:background="#ffffff"
+                            android:textColor="#000000"
+                            android:gravity="center"
+                            android:text="Empresa"
+                            android:textSize="18dp"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/textView18"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="#ffffff"
+                                android:textColor="#000000"
+                                android:gravity="bottom|center_horizontal"
+                                android:text="Días de"
+                                android:textSize="11sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textView15"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="2dp"
+                                android:background="#ffffff"
+                                android:textColor="#000000"
+                                android:gravity="top|center"
+                                android:text="retraso"
+                                android:textSize="12dp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <android.support.v4.widget.SwipeRefreshLayout
+                        android:id="@+id/swipeRefreshLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/recycler_view_empresas"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                    </android.support.v4.widget.SwipeRefreshLayout>
+                </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+</FrameLayout>
